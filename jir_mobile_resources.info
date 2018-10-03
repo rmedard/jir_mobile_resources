@@ -1,0 +1,7 @@
+name = Jir Mobile Resources
+description = A description of what your module does.
+core = 7.x
+package = JIR Custom
+project = jir_mobile_resources
+dependencies[] = services
+dependencies[] = rest_server
