@@ -46,8 +46,8 @@ function job_teaser_resource_retrieve($nid) {
     $node = node_load($nid);
     $job = array();
     if ($node->type == 'job') {
-        //        $employer_id = $node->field_employer[LANGUAGE_NONE][0]['value'];
-        //        $employer = node_load($employer_id);
+        $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
+        $employer = node_load($employer_id);
 
         $categories = array();
         foreach ($node->field_category[LANGUAGE_NONE] as $category) {
@@ -72,7 +72,11 @@ function job_teaser_resource_retrieve($nid) {
           'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
           'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
           'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
-          'body' => $node->body[LANGUAGE_NONE][0]['safe_value']
+          'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
+          'employer' => array(
+            'id' => $employer->nid,
+            'name' => $employer->title,
+          ),
         );
     }
     return $job;
