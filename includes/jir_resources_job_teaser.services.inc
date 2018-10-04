@@ -5,20 +5,21 @@
  */
 
 function job_teaser_resource() {
+    watchdog('jirapi', 'Job teaser resource entered');
     $api = array(
       'jir_job' => array(
         'operations' => array(
           'retrieve' => array(
             'help' => 'Retrieve JIR mobile Job resource.',
             'file' => array(
-              'file' => 'inc',
+              'type' => 'inc',
               'module' => 'jir_mobile_resources',
               'name' => 'includes/jir_resources_job_teaser.services',
             ),
             'callback' => 'job_teaser_resource_retrieve',
             'access callback' => 'user_access',
             'access arguments' => array('access content'),
-            'arg' => array(
+            'args' => array(
               'name' => 'nid',
               'type' => 'int',
               'description' => 'Function to perform',
