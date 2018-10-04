@@ -105,7 +105,8 @@ function job_teasers_list() {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
-        ->propertyCondition('status', NODE_PUBLISHED);
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->range(0, 10);
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
