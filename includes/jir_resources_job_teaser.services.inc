@@ -57,6 +57,7 @@ function job_teaser_resource_retrieve($nid) {
         $job = array(
           'job_title' => $node->title,
           'job_id' => $node->nid,
+          'path' => $node->path,
           'created_date' => $node->created,
           'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
           'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
