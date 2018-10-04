@@ -11,7 +11,7 @@ function job_teaser_resource() {
           'retrieve' => array(
             'help' => 'Retrieve JIR mobile Job resource.',
             'file' => array(
-              'type' => 'inc',
+              'file' => 'inc',
               'module' => 'jir_mobile_resources',
               'name' => 'includes/jir_resources_job_teaser.services',
             ),
