@@ -20,13 +20,13 @@ function job_teaser_resource() {
             'access callback' => 'user_access',
             'access arguments' => array('access content'),
             'args' => array(
-              'name' => 'nid',
-              'type' => 'int',
-              'description' => 'Function to perform',
-              'optional' => FALSE,
-              'source' => array(
-                'path' => '0',
-              ),
+              array(
+                'name' => 'nid',
+                'type' => 'int',
+                'description' => 'Function to perform',
+                'optional' => FALSE,
+                'source' => array('path' => '0')
+              )
             ),
           ),
         ),
