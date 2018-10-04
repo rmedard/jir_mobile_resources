@@ -67,7 +67,7 @@ function job_teaser_resource_retrieve($nid) {
           'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
           'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
           'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
-          'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid']),
+          'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
         );
     }
     return $job;
