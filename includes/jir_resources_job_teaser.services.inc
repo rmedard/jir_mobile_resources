@@ -77,6 +77,7 @@ function job_teaser_resource_retrieve($nid) {
           'employer' => array(
             'id' => $employer->nid,
             'name' => $employer->title,
+            'logo_url' => $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'],
           ),
         );
     }
