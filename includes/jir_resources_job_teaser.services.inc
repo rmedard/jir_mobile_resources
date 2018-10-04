@@ -47,7 +47,7 @@ function job_teaser_resource() {
 function job_teaser_resource_retrieve($nid) {
     $node = node_load($nid);
     $job = array();
-    if ($node->type == 'jir_mobile_resource_job') {
+    if ($node->type == 'job') {
         //        $employer_id = $node->field_employer[LANGUAGE_NONE][0]['value'];
         //        $employer = node_load($employer_id);
 
