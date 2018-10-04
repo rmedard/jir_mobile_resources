@@ -6,7 +6,7 @@
 
 function job_teaser_resource() {
     $api = array(
-      'jir_mobile_resource_job' => array(
+      'jir_job' => array(
         'operations' => array(
           'retrieve' => array(
             'help' => 'Retrieve JIR mobile Job resource.',
