@@ -55,19 +55,19 @@ function job_teaser_resource_retrieve($nid) {
           'job_id' => $node->nid,
           'created_date' => $node->created,
           'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
-          'posting_type' => $node->field_posting_type[LANGUAGE_NONE][0]['tid'],
+          'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
           'category' => taxonomy_term_load_multiple($node->field_category[LANGUAGE_NONE]),
           'deadline' => $node->field_deadline_for_application[LANGUAGE_NONE][0]['value'],
           'additional_email_cv' => $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'],
           'number_of_positions' => $node->field_number_of_positions[LANGUAGE_NONE][0]['value'],
-          'contract_type' => $node->field_contrat_type[LANGUAGE_NONE][0]['tid'],
-          'desired_experience' => $node->field_desired_experience[LANGUAGE_NONE][0]['tid'],
-          'desired_education_level' => $node->field_desired_education_level[LANGUAGE_NONE][0]['tid'],
+          'contract_type' => taxonomy_term_load($node->field_contrat_type[LANGUAGE_NONE][0]['tid'])->name,
+          'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
+          'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
           'offer_type' => $node->field_offer_type[LANGUAGE_NONE][0]['value'],
           'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
           'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
           'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
-          'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
+          'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name
         );
     }
     return $job;
