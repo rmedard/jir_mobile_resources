@@ -96,7 +96,7 @@ function get_job_resource($node) {
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
         'path' => drupal_get_path_alias('node/' . $node->nid),
-        'created_date' => format_date($node->created, 'custom', 'YYYY-MM-DDTHH:mmZ'),
+        'created_date' => format_date($node->created, 'short'),
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
         'category' => $categories,
