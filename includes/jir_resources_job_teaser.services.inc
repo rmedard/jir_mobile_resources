@@ -58,7 +58,7 @@ function job_teaser_resource_retrieve($nid)
     $node = node_load($nid);
     $job = array();
     if ($node->type == 'job') {
-        $job = get_job_teaser($node);
+        $job = get_job_resource($node);
     }
     return $job;
 }
@@ -78,13 +78,13 @@ function job_teasers_list() {
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
         foreach (entity_load('node', $jobs_ids) as $job) {
-            array_push($jobs, get_job_teaser($job));
+            array_push($jobs, get_job_resource($job));
         }
     }
     return $jobs;
 }
 
-function get_job_teaser($node) {
+function get_job_resource($node) {
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
@@ -96,7 +96,7 @@ function get_job_teaser($node) {
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
         'path' => drupal_get_path_alias('node/' . $node->nid),
-        'created_date' => $node->created,
+        'created_date' => format_date($node->created, 'long'),
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
         'category' => $categories,
