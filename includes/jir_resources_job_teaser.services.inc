@@ -4,33 +4,44 @@
  * Actual Resource
  */
 
-function job_teaser_resource() {
-    watchdog('jirapi', 'Job teaser resource entered');
+function job_teaser_resource()
+{
     $api = array(
-      'jir_job' => array(
-        'operations' => array(
-          'retrieve' => array(
-            'help' => 'Retrieve JIR mobile Job resource.',
-            'file' => array(
-              'type' => 'inc',
-              'module' => 'jir_mobile_resources',
-              'name' => 'includes/jir_resources_job_teaser.services',
+        'jir_job' => array(
+            'operations' => array(
+                'retrieve' => array(
+                    'help' => 'Retrieve JIR mobile Job resource.',
+                    'file' => array(
+                        'type' => 'inc',
+                        'module' => 'jir_mobile_resources',
+                        'name' => 'includes/jir_resources_job_teaser.services',
+                    ),
+                    'callback' => 'job_teaser_resource_retrieve',
+                    'access callback' => 'user_access',
+                    'access arguments' => array('access content'),
+                    'args' => array(
+                        array(
+                            'name' => 'nid',
+                            'type' => 'int',
+                            'description' => 'Function to perform',
+                            'optional' => FALSE,
+                            'source' => array('path' => '0'),
+                        ),
+                    ),
+                ),
+                'index' => array(
+                    'help' => 'Retrieve a lit od JIR mobile Job resource',
+                    'file' => array(
+                        'type' => 'inc',
+                        'module' => 'jir_mobile_resources',
+                        'name' => 'includes/jir_resources_job_teaser.services',
+                    ),
+                    'callback' => 'job_teasers_list',
+                    'access callback' => 'user_access',
+                    'access arguments' => array('access content'),
+                )
             ),
-            'callback' => 'job_teaser_resource_retrieve',
-            'access callback' => 'user_access',
-            'access arguments' => array('access content'),
-            'args' => array(
-              array(
-                'name' => 'nid',
-                'type' => 'int',
-                'description' => 'Function to perform',
-                'optional' => FALSE,
-                'source' => array('path' => '0'),
-              ),
-            ),
-          ),
         ),
-      ),
     );
     return $api;
 }
@@ -42,7 +53,8 @@ function job_teaser_resource() {
  * @return array
  *      The job node processed data
  */
-function job_teaser_resource_retrieve($nid) {
+function job_teaser_resource_retrieve($nid)
+{
     $node = node_load($nid);
     $job = array();
     if ($node->type == 'job') {
@@ -55,31 +67,49 @@ function job_teaser_resource_retrieve($nid) {
         }
 
         $job = array(
-          'job_title' => $node->title,
-          'job_id' => intval($node->nid),
-          'path' => drupal_get_path_alias('node/' . $node->nid),
-          'created_date' => $node->created,
-          'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
-          'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
-          'category' => $categories,
-          'deadline' => $node->field_deadline_for_application[LANGUAGE_NONE][0]['value'],
-          'additional_email_cv' => $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'],
-          'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
-          'contract_type' => taxonomy_term_load($node->field_contrat_type[LANGUAGE_NONE][0]['tid'])->name,
-          'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
-          'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
-          'offer_type' => $node->field_offer_type[LANGUAGE_NONE][0]['value'],
-          'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
-          'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
-          'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
-          'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
-          'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
-          'employer' => array(
-            'id' => intval($employer->nid),
-            'name' => $employer->title,
-            'logo_url' => file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']),
-          ),
+            'job_title' => $node->title,
+            'job_id' => intval($node->nid),
+            'path' => drupal_get_path_alias('node/' . $node->nid),
+            'created_date' => $node->created,
+            'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
+            'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
+            'category' => $categories,
+            'deadline' => $node->field_deadline_for_application[LANGUAGE_NONE][0]['value'],
+            'additional_email_cv' => $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'],
+            'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
+            'contract_type' => taxonomy_term_load($node->field_contrat_type[LANGUAGE_NONE][0]['tid'])->name,
+            'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
+            'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
+            'offer_type' => $node->field_offer_type[LANGUAGE_NONE][0]['value'],
+            'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
+            'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
+            'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
+            'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
+            'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
+            'employer' => array(
+                'id' => intval($employer->nid),
+                'name' => $employer->title,
+                'logo_url' => file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']),
+            ),
         );
     }
     return $job;
+}
+
+/**
+ * @return array
+ *      Return a list of jobs
+ */
+function job_teasers_list() {
+    $jobs = array();
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED);
+    $result = $query->execute();
+    if (isset($result['node'])) {
+        $jobs_ids = array_keys($result['node']);
+        $jobs = entity_load('node', $jobs_ids);
+    }
+    return $jobs;
 }

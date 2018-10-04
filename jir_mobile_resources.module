@@ -23,7 +23,6 @@ function jir_mobile_resources_services_resources()
     /**
      * Service APIs for contents
      */
-    watchdog('jirapi', 'Before call resource');
     $resources += job_teaser_resource();
 
     return $resources;
