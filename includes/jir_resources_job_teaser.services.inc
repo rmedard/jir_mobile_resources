@@ -56,7 +56,7 @@ function job_teaser_resource_retrieve($nid) {
           'created_date' => $node->created,
           'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
           'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
-          'category' => $node->field_category[LANGUAGE_NONE],
+          'category' => (array)$node->field_category[LANGUAGE_NONE],
           'deadline' => $node->field_deadline_for_application[LANGUAGE_NONE][0]['value'],
           'additional_email_cv' => $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'],
           'number_of_positions' => $node->field_number_of_positions[LANGUAGE_NONE][0]['value'],
