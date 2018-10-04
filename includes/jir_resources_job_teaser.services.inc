@@ -18,8 +18,7 @@ function job_teaser_resource() {
             'callback' => 'job_teaser_resource_retrieve',
             'access callback' => 'user_access',
             'access arguments' => array('access content'),
-            'access arguments append' => FALSE,
-            'args' => array(
+            'arg' => array(
               'name' => 'nid',
               'type' => 'int',
               'description' => 'Function to perform',
