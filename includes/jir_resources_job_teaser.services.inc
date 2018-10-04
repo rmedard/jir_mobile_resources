@@ -23,11 +23,10 @@ function job_teaser_resource() {
               'name' => 'nid',
               'type' => 'int',
               'description' => 'Function to perform',
+              'optional' => FALSE,
               'source' => [
-                'path' => '0',
-              ],
-              'optional' => TRUE,
-              'default' => '0',
+                'param' => 'nid',
+              ]
             ],
           ],
         ],
