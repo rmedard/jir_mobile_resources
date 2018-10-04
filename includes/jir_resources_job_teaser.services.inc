@@ -24,15 +24,12 @@ function job_teaser_resource() {
               'type' => 'int',
               'description' => 'Function to perform',
               'optional' => FALSE,
-              'source' => [
-                'param' => 'nid',
-              ]
+              'source' => 'param',
             ],
           ],
         ],
       ],
     ];
-
     return $api;
 }
 
@@ -45,17 +42,17 @@ function job_teaser_resource() {
  */
 function job_teaser_resource_retrieve($nid) {
     $node = node_load($nid);
-    $job = array();
+    $job = [];
     if ($node->type == 'job') {
         //        $employer_id = $node->field_employer[LANGUAGE_NONE][0]['value'];
         //        $employer = node_load($employer_id);
 
-        $job = array(
+        $job = [
           'job_title' => $node->title,
           'job_id' => $node->nid,
           'created_date' => $node->created,
           'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
-        );
+        ];
     }
     return $job;
 }
