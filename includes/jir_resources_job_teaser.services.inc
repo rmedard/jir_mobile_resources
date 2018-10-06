@@ -111,7 +111,7 @@ function get_job_resource($node) {
         'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
         'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
         'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
-        'body' => strip_tags($node->body[LANGUAGE_NONE][0]['safe_value']),
+        'body' => preg_replace('/\s+/', ' ', trim(strip_tags($node->body[LANGUAGE_NONE][0]['safe_value']))),
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->title,
