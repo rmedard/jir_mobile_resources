@@ -112,6 +112,8 @@ function get_job_resource($node) {
         'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
         'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
         'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
+        'is_featured_advert' => $node->field_is_featured_advert[LANGUAGE_NONE][0]['value'] == '1' ? true : false,
+        'is_super_featured' => $node->field_job_super_featured[LANGUAGE_NONE][0]['value'] == '1' ? true : false,
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->title,
