@@ -37,8 +37,8 @@ function job_teaser_resource()
                         'name' => 'includes/jir_resources_job_teaser.services',
                     ),
                     'callback' => 'job_teasers_list',
-                    'access callback' => 'user_access',
-                    'access arguments' => array('access content'),
+                    'access callback' => 'user_is_logged_in',
+//                    'access arguments' => array('access content'),
                 )
             ),
         ),
