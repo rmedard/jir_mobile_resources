@@ -129,7 +129,7 @@ function job_teasers_list($page, $pageSize, $search)
  */
 function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableInterface $query)
 {
-    $query->leftjoin('field_employer', 'emp', 'node.nid = emp.entity_id');
+    $query->leftjoin('field_employer', 'emp', 'node.nid = emp.entity_id AND emp.entity_type = :entity_type');
     $or = db_or()
         ->condition('title', '%' . db_like('Kigali') . '%', 'like')
         ->condition('emp.title', '%' . db_like('Kigali') . '%', 'like');
