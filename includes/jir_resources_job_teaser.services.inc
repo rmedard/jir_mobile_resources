@@ -97,7 +97,6 @@ function job_teasers_list()
         ->propertyCondition('status', NODE_PUBLISHED)
 //        ->range(0, 10)
     ;
-    watchdog('warning', 'Jobs count: ' . $query->count()->execute());
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
