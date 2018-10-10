@@ -113,6 +113,8 @@ function active_jobs_count() {
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
         ->count();
+    $count = $query->execute();
+    watchdog('warning', 'Jobs count: ' . $count);
     return intval($query->execute());
 }
 
