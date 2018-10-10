@@ -56,7 +56,7 @@ function job_teaser_resource() {
                                 'param' => 'pageSize',
                             ),
                             'optional' => TRUE,
-                            'default value' => 20,
+                            'default value' => 10,
                         ),
                         array(
                             'name' => 'parameters',
