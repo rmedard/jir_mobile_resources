@@ -77,15 +77,15 @@ function job_teaser_resource() {
                     ),
                     'callback' => 'active_jobs_count',
                     'access callback' => 'user_is_logged_in',
-//                    'args' => array(
-//                        array(
-//                            'name' => 'count',
-//                            'type' => 'string',
-//                            'description' => 'Function to perform',
-//                            'optional' => FALSE,
-//                            'source' => array('path' => '0'),
-//                        ),
-//                    ),
+                    'args' => array(
+                        array(
+                            'name' => 'count',
+                            'type' => 'string',
+                            'description' => 'Function to perform',
+                            'optional' => FALSE,
+                            'source' => array('path' => '0'),
+                        ),
+                    ),
                 ),
             ),
         ),
