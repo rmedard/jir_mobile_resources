@@ -37,17 +37,26 @@ function job_teaser_resource() {
                     ),
                     'callback' => 'job_teasers_list',
                     'access callback' => 'user_is_logged_in',
-                    //                    'access arguments' => array('access content'),
                     'args' => array(
                         array(
                             'name' => 'page',
                             'type' => 'int',
-                            'description' => '',
+                            'description' => 'Page number',
                             'source' => array(
                                 'param' => 'page',
                             ),
                             'optional' => TRUE,
                             'default value' => 0,
+                        ),
+                        array(
+                            'name' => 'pageSize',
+                            'type' => 'int',
+                            'description' => 'Page size',
+                            'source' => array(
+                                'param' => 'pageSize',
+                            ),
+                            'optional' => TRUE,
+                            'default value' => 20,
                         ),
                         array(
                             'name' => 'parameters',
@@ -106,14 +115,13 @@ function job_teaser_resource_retrieve($nid) {
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list($page, $parameters) {
+function job_teasers_list($page, $pageSize, $parameters) {
     $jobs = array();
-    $page_size = 20;
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->range($page * $page_size, $page_size);
+        ->range($page * $pageSize, $pageSize);
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
