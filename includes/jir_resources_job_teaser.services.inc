@@ -39,6 +39,25 @@ function job_teaser_resource()
                     'callback' => 'job_teasers_list',
                     'access callback' => 'user_is_logged_in',
 //                    'access arguments' => array('access content'),
+                ),
+                'count' => array(
+                    'help' => 'Count total active jobs',
+                    'file' => array(
+                        'type' => 'inc',
+                        'module' => 'jir_mobile_resources',
+                        'name' => 'includes/jir_resources_job_teaser.services',
+                    ),
+                    'callback' => 'active_jobs_count',
+                    'access callback' => 'user_is_logged_in',
+                    'args' => array(
+                        array(
+                            'name' => 'count',
+                            'type' => 'string',
+                            'description' => 'Function to perform',
+                            'optional' => FALSE,
+                            'source' => array('path' => '0'),
+                        ),
+                    ),
                 )
             ),
         ),
@@ -82,6 +101,19 @@ function job_teasers_list() {
         }
     }
     return $jobs;
+}
+
+/**
+ * @return int
+ *      Return total number of active jobs
+ */
+function active_jobs_count() {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->count();
+    return intval($query->execute());
 }
 
 function get_job_resource($node) {
