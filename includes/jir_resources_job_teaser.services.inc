@@ -136,15 +136,15 @@ function job_teasers_list($page, $pageSize, $parameters) {
  * @return int
  *      Return total number of active jobs
  */
-function active_jobs_count() {
+function active_jobs_count($count) {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
         ->count();
-    $count = $query->execute();
-    watchdog('warning', 'Jobs count: ' . $count);
-    return $count;
+    $jobs_count = $query->execute();
+    watchdog('warning', 'Jobs count: ' . $jobs_count);
+    return $jobs_count;
 }
 
 function get_job_resource($node) {
