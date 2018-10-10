@@ -115,7 +115,7 @@ function active_jobs_count() {
         ->count();
     $count = $query->execute();
     watchdog('warning', 'Jobs count: ' . $count);
-    return intval($query->execute());
+    return $count;
 }
 
 function get_job_resource($node) {
