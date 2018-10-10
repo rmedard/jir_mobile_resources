@@ -4,8 +4,7 @@
  * Actual Resource
  */
 
-function job_teaser_resource()
-{
+function job_teaser_resource() {
     $api = array(
         'jir_job' => array(
             'operations' => array(
@@ -18,7 +17,7 @@ function job_teaser_resource()
                     ),
                     'callback' => 'job_teaser_resource_retrieve',
                     'access callback' => 'user_is_logged_in',
-//                    'access arguments' => array('access content'),
+                    //                    'access arguments' => array('access content'),
                     'args' => array(
                         array(
                             'name' => 'nid',
@@ -38,7 +37,27 @@ function job_teaser_resource()
                     ),
                     'callback' => 'job_teasers_list',
                     'access callback' => 'user_is_logged_in',
-//                    'access arguments' => array('access content'),
+                    //                    'access arguments' => array('access content'),
+                    'args' => array(
+                        array(
+                            'name' => 'page',
+                            'type' => 'int',
+                            'description' => '',
+                            'source' => array(
+                                'param' => 'page',
+                            ),
+                            'optional' => TRUE,
+                            'default value' => 0,
+                        ),
+                        array(
+                            'name' => 'parameters',
+                            'type' => 'array',
+                            'description' => '',
+                            'source' => 'param',
+                            'optional' => TRUE,
+                            'default value' => array(),
+                        ),
+                    ),
                 ),
                 'count' => array(
                     'help' => 'Count total active jobs',
@@ -58,7 +77,7 @@ function job_teaser_resource()
                             'source' => array('path' => '0'),
                         ),
                     ),
-                )
+                ),
             ),
         ),
     );
@@ -72,8 +91,7 @@ function job_teaser_resource()
  * @return array
  *      The job node processed data
  */
-function job_teaser_resource_retrieve($nid)
-{
+function job_teaser_resource_retrieve($nid) {
     $node = node_load($nid);
     $job = array();
     if ($node and is_object($node)) {
@@ -88,15 +106,14 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list()
-{
+function job_teasers_list($page) {
     $jobs = array();
+    $page_size = 20;
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
-//        ->range(0, 10)
-    ;
+        ->range($page * $page_size, ($page * $page_size) + $page_size);
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
@@ -111,8 +128,7 @@ function job_teasers_list()
  * @return int
  *      Return total number of active jobs
  */
-function active_jobs_count()
-{
+function active_jobs_count() {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
@@ -123,8 +139,7 @@ function active_jobs_count()
     return $count;
 }
 
-function get_job_resource($node)
-{
+function get_job_resource($node) {
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
@@ -158,7 +173,7 @@ function get_job_resource($node)
             'id' => intval($employer->nid),
             'name' => $employer->title,
             'logo_url' => file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']),
-            'description' => $employer->field_summary[LANGUAGE_NONE][0]['value']
+            'description' => $employer->field_summary[LANGUAGE_NONE][0]['value'],
         ),
     );
     return $job;
