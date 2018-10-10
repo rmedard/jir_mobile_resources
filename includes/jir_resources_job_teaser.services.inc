@@ -4,8 +4,7 @@
  * Actual Resource
  */
 
-function job_teaser_resource()
-{
+function job_teaser_resource() {
     $api = array(
         'jir_job' => array(
             'operations' => array(
@@ -58,36 +57,9 @@ function job_teaser_resource()
                             ),
                             'optional' => TRUE,
                             'default value' => 10,
-                        ),
-                        array(
-                            'name' => 'parameters',
-                            'type' => 'array',
-                            'description' => '',
-                            'source' => 'param',
-                            'optional' => TRUE,
-                            'default value' => array(),
-                        ),
+                        )
                     ),
-                ),
-                'count' => array(
-                    'help' => 'Count total active jobs',
-                    'file' => array(
-                        'type' => 'inc',
-                        'module' => 'jir_mobile_resources',
-                        'name' => 'includes/jir_resources_job_teaser.services',
-                    ),
-                    'callback' => 'active_jobs_count',
-                    'access callback' => 'user_is_logged_in',
-                    'args' => array(
-                        array(
-                            'name' => 'count',
-                            'type' => 'string',
-                            'description' => 'Function to perform',
-                            'optional' => FALSE,
-                            'source' => array('path' => '0'),
-                        ),
-                    ),
-                ),
+                )
             ),
         ),
     );
@@ -101,8 +73,7 @@ function job_teaser_resource()
  * @return array
  *      The job node processed data
  */
-function job_teaser_resource_retrieve($nid)
-{
+function job_teaser_resource_retrieve($nid) {
     $node = node_load($nid);
     $job = array();
     if ($node and is_object($node)) {
@@ -114,55 +85,28 @@ function job_teaser_resource_retrieve($nid)
 }
 
 /**
- * @return array|int
- *      Return a list of jobs ot jobs count
+ * @return array
+ *      Return a list of jobs
  */
-function job_teasers_list($page, $pageSize, $parameters)
-{
+function job_teasers_list($page, $pageSize) {
     $jobs = array();
     $query = new EntityFieldQuery();
+
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
-        ->propertyCondition('status', NODE_PUBLISHED);
-
-    $parameters = array($parameters);
-    if (count($parameters) > 0 && in_array('count', $parameters)) {
-        $query->count();
-    } else {
-        $query->range($page * $pageSize, $pageSize);
-    }
-
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->range($page * $pageSize, $pageSize);
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
         foreach (entity_load('node', $jobs_ids) as $job) {
             array_push($jobs, get_job_resource($job));
         }
-        return $jobs;
-    } else {
-        return $result;
     }
-
+    return $jobs;
 }
 
-/**
- * @return int
- *      Return total number of active jobs
- */
-function active_jobs_count($count)
-{
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'job')
-        ->propertyCondition('status', NODE_PUBLISHED)
-        ->count();
-    $jobs_count = $query->execute();
-    watchdog('warning', 'Jobs count: ' . $jobs_count);
-    return $jobs_count;
-}
-
-function get_job_resource($node)
-{
+function get_job_resource($node) {
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
