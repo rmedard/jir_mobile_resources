@@ -113,7 +113,7 @@ function job_teasers_list($page) {
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->range($page * $page_size, ($page * $page_size) + $page_size);
+        ->range($page * $page_size, $page_size);
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
