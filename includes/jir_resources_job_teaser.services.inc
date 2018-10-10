@@ -106,7 +106,7 @@ function job_teaser_resource_retrieve($nid) {
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list($page) {
+function job_teasers_list($page, $parameters) {
     $jobs = array();
     $page_size = 20;
     $query = new EntityFieldQuery();
