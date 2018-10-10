@@ -4,7 +4,8 @@
  * Actual Resource
  */
 
-function job_teaser_resource() {
+function job_teaser_resource()
+{
     $api = array(
         'jir_job' => array(
             'operations' => array(
@@ -57,6 +58,16 @@ function job_teaser_resource() {
                             ),
                             'optional' => TRUE,
                             'default value' => 10,
+                        ),
+                        array(
+                            'name' => 'search',
+                            'type' => 'string',
+                            'description' => 'Search string',
+                            'source' => array(
+                                'param' => 'search',
+                            ),
+                            'optional' => TRUE,
+                            'default value' => '',
                         )
                     ),
                 )
@@ -73,7 +84,8 @@ function job_teaser_resource() {
  * @return array
  *      The job node processed data
  */
-function job_teaser_resource_retrieve($nid) {
+function job_teaser_resource_retrieve($nid)
+{
     $node = node_load($nid);
     $job = array();
     if ($node and is_object($node)) {
@@ -88,14 +100,19 @@ function job_teaser_resource_retrieve($nid) {
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list($page, $pageSize) {
+function job_teasers_list($page, $pageSize, $search)
+{
     $jobs = array();
     $query = new EntityFieldQuery();
-
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
         ->range($page * $pageSize, $pageSize);
+
+    if (isset($search) and strlen(trim($search)) > 0) {
+        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
+    }
+
     $result = $query->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
@@ -106,7 +123,8 @@ function job_teasers_list($page, $pageSize) {
     return $jobs;
 }
 
-function get_job_resource($node) {
+function get_job_resource($node)
+{
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
