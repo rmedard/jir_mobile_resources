@@ -110,7 +110,8 @@ function job_teasers_list($page, $pageSize, $search)
         ->range($page * $pageSize, $pageSize);
 
     if (isset($search) and strlen(trim($search)) > 0) {
-        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
+//        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
+        $query->addTag('job_or_employer_title');
     }
 
     $result = $query->execute();
@@ -121,6 +122,17 @@ function job_teasers_list($page, $pageSize, $search)
         }
     }
     return $jobs;
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableInterface $query)
+{
+    $or = db_or()
+        ->condition('title', '%' . db_like('Rwanda') . '%', 'like')
+        ->condition('', '%' . db_like('Rwanda') . '%', 'like');
+    $query->condition($or);
 }
 
 function get_job_resource($node)
