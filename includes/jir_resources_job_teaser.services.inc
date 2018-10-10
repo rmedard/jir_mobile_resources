@@ -52,7 +52,7 @@ function job_teaser_resource()
                     'args' => array(
                         array(
                             'name' => 'count',
-                            'type' => 'string',
+                            'type' => 'text',
                             'description' => 'Function to perform',
                             'optional' => FALSE,
                             'source' => array('path' => '0'),
