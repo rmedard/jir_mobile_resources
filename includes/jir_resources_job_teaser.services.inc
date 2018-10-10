@@ -156,7 +156,7 @@ function get_job_resource($node) {
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
         'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
-        'additional_email_cv' => $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'],
+        'additional_email_cv' => isset($node->field_additional_email_where_to) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
         'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
         'contract_type' => taxonomy_term_load($node->field_contrat_type[LANGUAGE_NONE][0]['tid'])->name,
         'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
