@@ -76,8 +76,10 @@ function job_teaser_resource_retrieve($nid)
 {
     $node = node_load($nid);
     $job = array();
-    if ($node->type == 'job') {
-        $job = get_job_resource($node);
+    if ($node and is_object($node)) {
+        if ($node->type == 'job') {
+            $job = get_job_resource($node);
+        }
     }
     return $job;
 }
@@ -86,7 +88,8 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list() {
+function job_teasers_list()
+{
     $jobs = array();
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
@@ -107,7 +110,8 @@ function job_teasers_list() {
  * @return int
  *      Return total number of active jobs
  */
-function active_jobs_count() {
+function active_jobs_count()
+{
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
@@ -118,7 +122,8 @@ function active_jobs_count() {
     return $count;
 }
 
-function get_job_resource($node) {
+function get_job_resource($node)
+{
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
