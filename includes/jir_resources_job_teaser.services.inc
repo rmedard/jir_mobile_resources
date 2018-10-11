@@ -132,8 +132,8 @@ function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableIn
     $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
     $search = $query->getMetaData('search');
     $or = db_or();
-    $or->condition('node.title', '%' . db_like($search) . '%', 'like');
-    $or->condition('n.title', '%' . db_like($search) . '%', 'like');
+    $or->condition('node.title', '%' . db_like($search) . '%', 'like')
+        ->condition('n.title', '%' . db_like($search) . '%', 'like');
     $query->condition($or);
 }
 
