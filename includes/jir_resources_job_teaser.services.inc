@@ -132,7 +132,7 @@ function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableIn
 {
     $query->join('node', 'job', 'nid = job.field_employer');
     $or = db_or()
-        ->condition('emp.title', '%' . db_like('Kigali') . '%', 'like')
+        ->condition('job.title', '%' . db_like('Kigali') . '%', 'like')
         ->condition('node.title', '%' . db_like('Kigali') . '%', 'like');
     $query->condition($or);
 }
