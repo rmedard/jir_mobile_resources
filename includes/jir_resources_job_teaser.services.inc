@@ -107,7 +107,7 @@ function job_teasers_list($page, $pageSize, $search)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->propertyCondition('field_employer', 0, '<>')
+        ->propertyCondition('field_employer', '0', '<>')
         ->range($page * $pageSize, $pageSize);
 
     if (isset($search) and strlen(trim($search)) > 0) {
