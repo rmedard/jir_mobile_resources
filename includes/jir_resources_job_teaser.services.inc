@@ -112,6 +112,7 @@ function job_teasers_list($page, $pageSize, $search)
 
     if (isset($search) and strlen(trim($search)) > 0) {
         $query->addTag('job_or_employer_title');
+        $query->addMetaData('search', $search);
     }
 
     $result = $query->execute();
@@ -131,9 +132,10 @@ function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableIn
 {
     $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
     $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
+    $search = $query->getMetaData('search');
     $or = db_or();
-    $or->condition('node.title', '%' . db_like('Kigali') . '%', 'like');
-    $or->condition('n.title', '%' . db_like('Kigali') . '%', 'like');
+    $or->condition('node.title', '%' . db_like($search) . '%', 'like');
+    $or->condition('n.title', '%' . db_like($search) . '%', 'like');
     $query->condition($or);
 }
 
