@@ -111,8 +111,8 @@ function job_teasers_list($page, $pageSize, $search)
         ->range($page * $pageSize, $pageSize);
 
     if (isset($search) and strlen(trim($search)) > 0) {
-        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
-//        $query->addTag('job_or_employer_title');
+//        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
+        $query->addTag('job_or_employer_title');
     }
 
     $result = $query->execute();
@@ -130,7 +130,7 @@ function job_teasers_list($page, $pageSize, $search)
  */
 function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableInterface &$query)
 {
-    $query->join('node', 'emp', 'emp.nid = node.field_employer AND emp.type = :bundle', array(':bundle' => 'employer'));
+    $query->join('field_employer', 'emp', 'node.nid = emp.entity_id');
     $or = db_or()
         ->condition('emp.title', '%' . db_like('Kigali') . '%', 'like')
         ->condition('node.title', '%' . db_like('Kigali') . '%', 'like');
