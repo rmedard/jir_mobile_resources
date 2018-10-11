@@ -111,7 +111,6 @@ function job_teasers_list($page, $pageSize, $search)
         ->range($page * $pageSize, $pageSize);
 
     if (isset($search) and strlen(trim($search)) > 0) {
-//        $query->propertyCondition('title', '%' . db_like($search) . '%', 'like');
         $query->addTag('job_or_employer_title');
     }
 
