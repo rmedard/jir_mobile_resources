@@ -171,7 +171,7 @@ function get_job_resource($node)
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->title,
-            'logo_url' => file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']),
+            'logo_url' => isset($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) ? file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) : '',
             'description' => $employer->field_summary[LANGUAGE_NONE][0]['value'],
         ),
     );
