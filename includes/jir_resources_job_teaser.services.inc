@@ -143,9 +143,12 @@ function get_job_resource($node)
     $employer = node_load($employer_id);
 
     $categories = array();
-    foreach ($node->field_category[LANGUAGE_NONE] as $category) {
-        array_push($categories, taxonomy_term_load($category['tid'])->name);
+    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
+        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
+            array_push($categories, taxonomy_term_load($category['tid'])->name);
+        }
     }
+
     $job = array(
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
