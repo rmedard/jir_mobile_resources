@@ -18,7 +18,7 @@ function employer_teaser_resource() {
                     ),
                     'callback' => 'employer_teaser_resource_retrieve',
                     'access callback' => 'user_is_logged_in',
-                    //                    'access arguments' => array('access content'),
+                    //'access arguments' => array('access content'),
                     'args' => array(
                         array(
                             'name' => 'nid',
