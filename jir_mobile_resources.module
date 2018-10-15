@@ -38,7 +38,7 @@ function jir_mobile_resources_services_resources()
      */
     module_load_include('inc', 'jir_mobile_resources', 'includes/jir_resources_job_teaser.services');
 //    module_load_include('inc', 'jir_mobile_resources', 'includes/jir_resources_job_full.services');
-//    module_load_include('inc', 'jir_mobile_resources', 'includes/jir_resources_employer_teaser.services');
+    module_load_include('inc', 'jir_mobile_resources', 'includes/jir_resources_employer_teaser.services');
 //    module_load_include('inc', 'jir_mobile_resources', 'includes/jir_resources_employer_full.services');
 
     /**
