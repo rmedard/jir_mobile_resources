@@ -45,6 +45,7 @@ function jir_mobile_resources_services_resources()
      * Service APIs for contents
      */
     $resources += job_teaser_resource();
+    $resources += employer_teaser_resource();
 
     return $resources;
 }
