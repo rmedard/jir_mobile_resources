@@ -103,6 +103,6 @@ function map_employer_teaser ($node) {
     return array(
         'title' => $node->title,
         'logo_url' => isset($node->field_employer_logo[LANGUAGE_NONE][0]['uri']) ?
-            $node->field_employer_logo[LANGUAGE_NONE][0]['uri'] : ''
+            file_create_url($node->field_employer_logo[LANGUAGE_NONE][0]['uri']) : ''
     );
 }
