@@ -68,7 +68,17 @@ function job_teaser_resource()
                             ),
                             'optional' => TRUE,
                             'default value' => '',
-                        )
+                        ),
+                        array(
+                            'name' => 'employer',
+                            'type' => 'int',
+                            'description' => 'ID of the employer to whom jobs belong',
+                            'source' => array(
+                                'param' => 'employer',
+                            ),
+                            'optional' => TRUE,
+                            'default value' => 0,
+                        ),
                     ),
                 )
             ),
@@ -100,7 +110,7 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list($page, $pageSize, $search)
+function job_teasers_list($page, $pageSize, $search, $employerId)
 {
     $jobs = array();
     $query = new EntityFieldQuery();
@@ -111,6 +121,10 @@ function job_teasers_list($page, $pageSize, $search)
 
     if (isset($search) and strlen(trim($search)) > 0) {
         $query->addTag('job_or_employer_title')->addMetaData('search', $search);
+    }
+
+    if (isset($employerId) and intval($employerId) !== 0) {
+        $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
 
     $result = $query->execute();
