@@ -136,9 +136,9 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         }
     }
 
-    drupal_add_http_header('finished', '0');
+    drupal_add_http_header('X-finished', '0');
     if ($counter === 0 or $counter != $pageSize) {
-        drupal_add_http_header('finished', '1');
+        drupal_add_http_header('X-finished', '1');
     }
     return $jobs;
 }
