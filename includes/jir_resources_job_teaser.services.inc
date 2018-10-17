@@ -133,6 +133,9 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
             array_push($jobs, get_job_resource($job));
         }
     }
+
+    $count = $query->count()->execute();
+    drupal_add_http_header('count', $count);
     return $jobs;
 }
 
