@@ -126,17 +126,20 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
 
-    $countQuery = $query;
-    $count = $countQuery->count()->execute();
     $result = $query->range($page * $pageSize, $pageSize)->execute();
+    $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
         foreach (entity_load('node', $jobs_ids) as $job) {
             array_push($jobs, get_job_resource($job));
+            $counter++;
         }
     }
 
-    drupal_add_http_header('count', $count);
+    drupal_add_http_header('finish', false);
+    if ($counter === 0 or $counter != $pageSize) {
+        drupal_add_http_header('finish', true);
+    }
     return $jobs;
 }
 
