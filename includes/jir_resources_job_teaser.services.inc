@@ -126,6 +126,7 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
 
+    $count = $query->count()->execute();
     $result = $query->range($page * $pageSize, $pageSize)->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
@@ -134,7 +135,6 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         }
     }
 
-    $count = $query->count()->execute();
     drupal_add_http_header('count', $count);
     return $jobs;
 }
