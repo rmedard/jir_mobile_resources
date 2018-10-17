@@ -116,8 +116,7 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
-        ->propertyCondition('status', NODE_PUBLISHED)
-        ->range($page * $pageSize, $pageSize);
+        ->propertyCondition('status', NODE_PUBLISHED);
 
     if (isset($search) and strlen(trim($search)) > 0) {
         $query->addTag('job_or_employer_title')->addMetaData('search', $search);
@@ -127,7 +126,7 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
 
-    $result = $query->execute();
+    $result = $query->range($page * $pageSize, $pageSize)->execute();
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
         foreach (entity_load('node', $jobs_ids) as $job) {
