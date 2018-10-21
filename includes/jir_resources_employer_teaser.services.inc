@@ -87,6 +87,7 @@ function employer_teasers_list ($page, $pageSize) {
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
+        ->addTag('employer_has_jobs')
         ->range($page * $pageSize, $pageSize);
 
     $result = $query->execute();
@@ -106,4 +107,12 @@ function map_employer_teaser ($node) {
         'logo_url' => isset($node->field_employer_logo[LANGUAGE_NONE][0]['uri']) ?
             file_create_url($node->field_employer_logo[LANGUAGE_NONE][0]['uri']) : ''
     );
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterface $query)
+{
+    $query->join('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
 }
