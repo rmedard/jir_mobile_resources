@@ -39,16 +39,16 @@ function job_teaser_resource()
                     'callback' => 'job_teasers_list',
                     'access callback' => 'user_is_logged_in',
                     'args' => array(
-                        array(
-                            'name' => 'page',
-                            'type' => 'int',
-                            'description' => 'Page number',
-                            'source' => array(
-                                'param' => 'page',
-                            ),
-                            'optional' => TRUE,
-                            'default value' => 0,
-                        ),
+//                        array(
+//                            'name' => 'page',
+//                            'type' => 'int',
+//                            'description' => 'Page number',
+//                            'source' => array(
+//                                'param' => 'page',
+//                            ),
+//                            'optional' => TRUE,
+//                            'default value' => 0,
+//                        ),
                         array(
                             'name' => 'pageSize',
                             'type' => 'int',
@@ -110,7 +110,7 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *      Return a list of jobs
  */
-function job_teasers_list($page, $pageSize, $search, $employerId)
+function job_teasers_list($pageSize, $search, $employerId)
 {
     $jobs = array();
     $query = new EntityFieldQuery();
