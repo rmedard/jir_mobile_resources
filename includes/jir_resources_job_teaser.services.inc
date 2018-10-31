@@ -108,7 +108,7 @@ function job_teaser_resource_retrieve($nid)
 
 /**
  * @return array
- *      Return a list of jobs
+ *  Return a list of jobs
  */
 function job_teasers_list($pageSize, $search, $employerId)
 {
@@ -125,9 +125,13 @@ function job_teasers_list($pageSize, $search, $employerId)
     if (isset($employerId) and intval($employerId) !== 0) {
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
-//    $result = $query->pager($pageSize)->execute();
-    $result = $query->fieldOrderBy('field_posting_type', 'tid', 'DESC')
-        ->pager($pageSize)->execute();
+    try {
+        $query->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
+    $result = $query->pager($pageSize)->execute();
+
     $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
