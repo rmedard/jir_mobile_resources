@@ -126,7 +126,8 @@ function job_teasers_list($pageSize, $search, $employerId)
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
     try {
-        $query->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+        $query->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
     } catch (EntityFieldQueryException $e) {
         watchdog('error', $e);
     }
@@ -155,17 +156,12 @@ function job_teasers_list($pageSize, $search, $employerId)
 function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableInterface &$query)
 {
     $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
-//    $query->leftjoin('field_data_field_posting_type', 'f', 'nid = f.entity_id');
-
     $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
-//    $query->leftjoin('taxonomy_term_data', 't', 't.tid = f.field_posting_type_tid');
-
     $search = $query->getMetaData('search');
     $or = db_or();
     $or->condition('node.title', '%' . db_like($search) . '%', 'like')
         ->condition('n.title', '%' . db_like($search) . '%', 'like');
     $query->condition($or);
-//    $query->orderBy('t.weight', 'DESC');
 }
 
 function get_job_resource($node)
