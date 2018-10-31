@@ -150,10 +150,10 @@ function job_teasers_list($pageSize, $search, $employerId)
 function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableInterface &$query)
 {
     $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
-    $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
-
     $query->leftjoin('field_data_field_posting_type', 'f', 'nid = f.entity_id');
-    $query->leftjoin('taxonomy_term_data', 't', 'f.field_posting_type_tid = t.tid');
+
+    $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
+    $query->leftjoin('taxonomy_term_data', 't', 't.tid = f.field_posting_type_tid');
 
     $search = $query->getMetaData('search');
     $or = db_or();
