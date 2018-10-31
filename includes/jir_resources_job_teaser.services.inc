@@ -126,7 +126,12 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
 
-    $result = $query->range($page * $pageSize, $pageSize)->execute();
+    try {
+        $result = $query->range($page * $pageSize, $pageSize)
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC')->execute();
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
     $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
