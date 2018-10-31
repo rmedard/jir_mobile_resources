@@ -125,7 +125,8 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
     if (isset($employerId) and intval($employerId) !== 0) {
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
-    $result = $query->range($page * $pageSize, $pageSize)->execute();
+//    $result = $query->range($page * $pageSize, $pageSize)->execute();
+    $result = $query->pager(10)->execute();
     $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
