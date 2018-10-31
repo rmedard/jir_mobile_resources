@@ -128,7 +128,7 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
 
     try {
         $result = $query->range($page * $pageSize, $pageSize)
-            ->fieldOrderBy('field_posting_type', 'tid', 'DESC')->execute();
+            ->fieldOrderBy('field_posting_type', 'weight', 'DESC')->execute();
     } catch (EntityFieldQueryException $e) {
         watchdog('error', $e);
     }
