@@ -179,7 +179,7 @@ function get_job_resource($node)
         'created_date' => format_date($node->created, 'short'),
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
-        'posting_type_weight' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->weight,
+        'posting_type_weight' => intval(taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->weight),
         'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
         'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
