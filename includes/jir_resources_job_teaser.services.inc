@@ -125,8 +125,8 @@ function job_teasers_list($page, $pageSize, $search, $employerId)
     if (isset($employerId) and intval($employerId) !== 0) {
         $query->fieldCondition('field_employer', 'target_id', intval($employerId));
     }
-//    $result = $query->range($page * $pageSize, $pageSize)->execute();
-    $result = $query->fieldOrderBy('field_posting_type', 'tid', 'DESC')->pager(10)->execute();
+    $result = $query->pager($pageSize)->execute();
+//    $result = $query->fieldOrderBy('field_posting_type', 'tid', 'DESC')->pager(10)->execute();
     $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
@@ -151,13 +151,13 @@ function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableIn
 {
     $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
     $query->leftjoin('node', 'n', 'n.nid = e.field_employer_target_id');
-//    $query->leftjoin('taxonomy_term_data', 't', 'node.field_posting_type = t.tid');
+    $query->leftjoin('taxonomy_term_data', 't', 'node.field_posting_type = t.tid');
     $search = $query->getMetaData('search');
     $or = db_or();
     $or->condition('node.title', '%' . db_like($search) . '%', 'like')
         ->condition('n.title', '%' . db_like($search) . '%', 'like');
     $query->condition($or);
-//    $query->orderBy('t.weight', 'DESC');
+    $query->orderBy('t.weight', 'DESC');
 }
 
 function get_job_resource($node)
