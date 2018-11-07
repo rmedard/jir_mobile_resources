@@ -40,16 +40,6 @@ function employer_teaser_resource() {
                     'access callback' => 'user_is_logged_in',
                     'args' => array(
                         array(
-                            'name' => 'page',
-                            'type' => 'int',
-                            'description' => 'Page number',
-                            'source' => array(
-                                'param' => 'page',
-                            ),
-                            'optional' => TRUE,
-                            'default value' => 0,
-                        ),
-                        array(
                             'name' => 'pageSize',
                             'type' => 'int',
                             'description' => 'Page size',
@@ -81,16 +71,15 @@ function employer_teaser_resource_retrieve () {
 
 }
 
-function employer_teasers_list ($page, $pageSize) {
+function employer_teasers_list ($pageSize) {
     $employers = array();
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->addTag('employer_has_jobs')
-        ->range($page * $pageSize, $pageSize);
+        ->addTag('employer_has_jobs');
 
-    $result = $query->execute();
+    $result = $query->pager($pageSize)->execute();
     if (isset($result['node'])) {
         $employer_ids = array_keys($result['node']);
         foreach (entity_load('node', $employer_ids) as $employer) {

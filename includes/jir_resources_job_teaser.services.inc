@@ -39,16 +39,6 @@ function job_teaser_resource()
                     'callback' => 'job_teasers_list',
                     'access callback' => 'user_is_logged_in',
                     'args' => array(
-//                        array(
-//                            'name' => 'page',
-//                            'type' => 'int',
-//                            'description' => 'Page number',
-//                            'source' => array(
-//                                'param' => 'page',
-//                            ),
-//                            'optional' => TRUE,
-//                            'default value' => 0,
-//                        ),
                         array(
                             'name' => 'pageSize',
                             'type' => 'int',
