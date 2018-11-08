@@ -81,7 +81,7 @@ function employer_teaser_resource_retrieve () {
 
 }
 
-function employer_teasers_list ($pageSize) {
+function employer_teasers_list ($page, $pageSize, $search) {
     $employers = array();
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
