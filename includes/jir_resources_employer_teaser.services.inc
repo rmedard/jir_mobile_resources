@@ -105,6 +105,6 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 {
     if ($query instanceof SelectQueryInterface) {
         $query->innerjoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
-        $query->innerJoin('node', 'n', 'e.target_id = n.nid AND n.status = :status', array('status' => NODE_PUBLISHED));
+        $query->innerJoin('node', 'n', 'e.entity_id = n.nid AND n.status = :status', array('status' => NODE_PUBLISHED));
     }
 }
