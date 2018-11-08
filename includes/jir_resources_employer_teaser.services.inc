@@ -87,9 +87,12 @@ function employer_teasers_list ($page, $pageSize, $search) {
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->addTag('employer_has_jobs');
+        ->addTag('employer_has_jobs')
+        ->pager($pageSize);
 
-    $result = $query->pager($pageSize)->execute();
+    watchdog('info', 'PagerSize: ' . $pageSize);
+
+    $result = $query->execute();
     if (isset($result['node'])) {
         $employer_ids = array_keys($result['node']);
         foreach (entity_load('node', $employer_ids) as $employer) {
