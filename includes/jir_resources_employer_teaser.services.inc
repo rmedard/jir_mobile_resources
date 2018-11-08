@@ -105,6 +105,6 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 {
     if ($query instanceof SelectQueryInterface) {
         $query->innerjoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id AND e.bundle = :bundle', array('bundle' => 'job'));
-        $query->innerjoin('node', 'n', 'e.entity_id = n.nid AND n.status = 1');
+        $query->exists(db_select('node', 'n')->condition('n.id', 'e.entity_id')->condition('n.status', 1));
     }
 }
