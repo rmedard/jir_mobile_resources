@@ -126,12 +126,36 @@ function job_teasers_list($pageSize, $search, $employerId)
     $counter = 0;
     if (isset($result['node'])) {
         $jobs_ids = array_keys($result['node']);
+//        $resultFields = array();
+//        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
         foreach (entity_load('node', $jobs_ids) as $job) {
             array_push($jobs, get_job_resource($job));
             $counter++;
         }
     }
 
+
+    $smartQuery = new EntityFieldQueryExtraFields();
+    $smartQuery->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED);
+    if (isset($search) and strlen(trim($search)) > 0) {
+        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
+    }
+
+    if (isset($employerId) and intval($employerId) !== 0) {
+        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
+    }
+    try {
+        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
+//    $smartQuery->addExtraField('', 'title')
+//        ->addExtraField('', 'created')
+//        ->addExtraField('field_contact_name', 'value')
+//        ->addExtraField('field_posting_type', 'tid');
 //    drupal_add_http_header('X-finished', '0');
 //    if ($counter === 0 or $counter != $pageSize) {
 //        drupal_add_http_header('X-finished', '1');
@@ -171,29 +195,29 @@ function get_job_resource($node)
         'job_id' => intval($node->nid),
         'path' => drupal_get_path_alias('node/' . $node->nid),
         'created_date' => format_date($node->created, 'short'),
-        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
+//        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
         'posting_type_weight' => intval(taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->weight),
         'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
-        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
-        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
+//        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
+//        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
         'contract_type' => taxonomy_term_load($node->field_contrat_type[LANGUAGE_NONE][0]['tid'])->name,
         'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
-        'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
+//        'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
         'offer_type' => $node->field_offer_type[LANGUAGE_NONE][0]['value'],
         'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
         'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
-        'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
-        'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
-        'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
+//        'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
+//        'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
+//        'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
         'is_featured_advert' => boolval($node->field_is_featured_advert[LANGUAGE_NONE][0]['value']),
         'is_super_featured' => boolval($node->field_job_super_featured[LANGUAGE_NONE][0]['value']),
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->title,
             'logo_url' => isset($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) ? file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) : '',
-            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
+//            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
         ),
     );
     return $job;
