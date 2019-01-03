@@ -90,7 +90,7 @@ function job_teaser_resource_retrieve($nid)
     $job = array();
     if ($node and is_object($node)) {
         if ($node->type == 'job') {
-            $job = get_job_resource($node);
+            $job = get_job_teasers_resource($node);
         }
     }
     return $job;
@@ -129,37 +129,62 @@ function job_teasers_list($pageSize, $search, $employerId)
 //        $resultFields = array();
 //        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
         foreach (entity_load('node', $jobs_ids) as $job) {
-            array_push($jobs, get_job_resource($job));
+            array_push($jobs, get_job_teasers_resource($job));
             $counter++;
         }
     }
 
 
-//    $smartQuery = new EntityFieldQueryExtraFields();
-//    $smartQuery->entityCondition('entity_type', 'node')
-//        ->entityCondition('bundle', 'job')
-//        ->propertyCondition('status', NODE_PUBLISHED);
-//    if (isset($search) and strlen(trim($search)) > 0) {
-//        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
-//    }
-//
-//    if (isset($employerId) and intval($employerId) !== 0) {
-//        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
-//    }
-//    try {
-//        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
-//            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
-//    } catch (EntityFieldQueryException $e) {
-//        watchdog('error', $e);
-//    }
-//    $smartQuery->addExtraField('', 'title')
+    $smartQuery = new EntityFieldQueryExtraFields();
+    $smartQuery->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED);
+    if (isset($search) and strlen(trim($search)) > 0) {
+        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
+    }
+
+    if (isset($employerId) and intval($employerId) !== 0) {
+        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
+    }
+    try {
+        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
+    $smartQuery->addExtraField('', 'title')
 //        ->addExtraField('', 'created')
 //        ->addExtraField('field_contact_name', 'value')
-//        ->addExtraField('field_posting_type', 'tid');
+        ->addExtraField('field_posting_type', 'tid')
+        ->addExtraField('field_deadline_for_application', 'value')
+        ->addExtraField('field_contrat_type', 'tid')
+        ->addExtraField('field_desired_experience', 'tid')
+        ->addExtraField('field_offer_type', 'value')
+        ->addExtraField('field_job_city', 'safe_value')
+        ->addExtraField('field_job_country', 'iso2')
+        ->addExtraField('field_is_featured_advert', 'value')
+        ->addExtraField('field_job_super_featured', 'value')
+    ;
+
 //    drupal_add_http_header('X-finished', '0');
 //    if ($counter === 0 or $counter != $pageSize) {
 //        drupal_add_http_header('X-finished', '1');
 //    }
+    $smartResult = $smartQuery->pager($pageSize)->execute();
+
+    watchdog('Rest API', print_r($smartResult), WATCHDOG_INFO);
+
+//    $counter = 0;
+//    if (isset($smartResult['node'])) {
+//        $jobs_details = array_keys($result['node']);
+////        $resultFields = array();
+////        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
+//        foreach ($jobs_details as $job) {
+//            array_push($jobs, get_job_teasers_resource($job));
+//            $counter++;
+//        }
+//    }
+
     return $jobs;
 }
 
@@ -178,7 +203,7 @@ function jir_mobile_resources_query_job_or_employer_title_alter(QueryAlterableIn
     $query->condition($or);
 }
 
-function get_job_resource($node)
+function get_job_teasers_resource($node)
 {
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
