@@ -259,14 +259,14 @@ function get_job_teasers_resource($node)
 }
 
 function get_job_teasers_resource_new($node) {
-    $smartQuery = new EntityFieldQueryExtraFields();
-    $smartQuery->entityCondition('entity_type', 'node')
+    $query = new EntityFieldQueryExtraFields();
+    $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', intval($node->extraFields->field_employer_));
-    $smartQuery->addExtraField('', 'title', null, 'node')
-        ->addExtraField('field_employer_logo', 'uri');
+    $query->addExtraField('', 'title', null, 'node')
+        ->addExtraField('field_employer_logo', 'fid');
 
-    $result = $smartQuery->execute();
+    $result = $query->execute();
     $employer = json_decode($result['node'], true)[0];
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
