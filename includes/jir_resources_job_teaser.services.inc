@@ -152,6 +152,7 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->addExtraField('field_job_country', 'iso2', null, 'field_data_field_job_country')
         ->addExtraField('field_is_featured_advert', 'value', null, 'field_data_field_is_featured_advert')
         ->addExtraField('field_job_super_featured', 'value', null, 'field_data_field_field_job_super_featured')
+        ->addExtraField('field_employer', 'target_id', null, 'field_data_target_id')
     ;
     if (isset($search) and strlen(trim($search)) > 0) {
         $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
@@ -172,6 +173,10 @@ function job_teasers_list($pageSize, $search, $employerId)
 //        drupal_add_http_header('X-finished', '1');
 //    }
     $smartResult = $smartQuery->pager($pageSize)->execute();
+
+    foreach ($smartResult['node'] as $jobNode) {
+
+    }
 
     watchdog('Rest API', json_encode($smartResult));
 
