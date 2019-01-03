@@ -183,22 +183,24 @@ function get_job_resource($node)
     $employer_id = $node->field_employer[LANGUAGE_NONE][0]['target_id'];
     $employer = node_load($employer_id);
 
-    $categories = array();
-    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
-        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
-            array_push($categories, taxonomy_term_load($category['tid'])->name);
-        }
-    }
+//    $categories = array();
+//    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
+//        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
+//            array_push($categories, taxonomy_term_load($category['tid'])->name);
+//        }
+//    }
+
+    $employerLogoUri = $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'];
 
     $job = array(
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
         'path' => drupal_get_path_alias('node/' . $node->nid),
-        'created_date' => format_date($node->created, 'short'),
+//        'created_date' => format_date($node->created, 'short'),
 //        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
         'posting_type_weight' => intval(taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->weight),
-        'category' => $categories,
+//        'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
 //        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
 //        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
@@ -216,7 +218,7 @@ function get_job_resource($node)
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->title,
-            'logo_url' => isset($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) ? file_create_url($employer->field_employer_logo[LANGUAGE_NONE][0]['uri']) : '',
+            'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
 //            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
         ),
     );
