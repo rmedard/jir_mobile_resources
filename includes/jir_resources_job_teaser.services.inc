@@ -139,19 +139,7 @@ function job_teasers_list($pageSize, $search, $employerId)
     $smartQuery->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED);
-    if (isset($search) and strlen(trim($search)) > 0) {
-        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
-    }
 
-    if (isset($employerId) and intval($employerId) !== 0) {
-        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
-    }
-    try {
-        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
-            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
-    } catch (EntityFieldQueryException $e) {
-        watchdog('error', $e);
-    }
     $smartQuery->addExtraField('', 'title')
 //        ->addExtraField('', 'created')
 //        ->addExtraField('field_contact_name', 'value')
@@ -165,6 +153,19 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->addExtraField('field_is_featured_advert', 'value')
         ->addExtraField('field_job_super_featured', 'value')
     ;
+    if (isset($search) and strlen(trim($search)) > 0) {
+        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
+    }
+
+    if (isset($employerId) and intval($employerId) !== 0) {
+        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
+    }
+    try {
+        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
 
 //    drupal_add_http_header('X-finished', '0');
 //    if ($counter === 0 or $counter != $pageSize) {
