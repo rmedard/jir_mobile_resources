@@ -144,14 +144,14 @@ function job_teasers_list($pageSize, $search, $employerId)
 //        ->addExtraField('', 'created')
 //        ->addExtraField('field_contact_name', 'value')
         ->addExtraField('field_posting_type', 'tid', null, 'field_data_field_posting_type')
-//        ->addExtraField('field_deadline_for_application', 'value')
-//        ->addExtraField('field_contrat_type', 'tid')
-//        ->addExtraField('field_desired_experience', 'tid')
-//        ->addExtraField('field_offer_type', 'value')
-//        ->addExtraField('field_job_city', 'safe_value')
-//        ->addExtraField('field_job_country', 'iso2')
-//        ->addExtraField('field_is_featured_advert', 'value')
-//        ->addExtraField('field_job_super_featured', 'value')
+        ->addExtraField('field_deadline_for_application', 'value', null, 'field_data_field_deadline_for_application')
+        ->addExtraField('field_contrat_type', 'tid', null, 'field_data_field_contrat_type')
+        ->addExtraField('field_desired_experience', 'tid', null, 'field_data_field_desired_experience')
+        ->addExtraField('field_offer_type', 'value', null, 'field_data_field_offer_type')
+        ->addExtraField('field_job_city', 'safe_value', null, 'field_data_field_job_city')
+        ->addExtraField('field_job_country', 'iso2', null, 'field_data_field_job_country')
+        ->addExtraField('field_is_featured_advert', 'value', null, 'field_data_field_is_featured_advert')
+        ->addExtraField('field_job_super_featured', 'value', null, 'field_data_field_field_job_super_featured')
     ;
     if (isset($search) and strlen(trim($search)) > 0) {
         $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
@@ -173,7 +173,7 @@ function job_teasers_list($pageSize, $search, $employerId)
 //    }
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
-    watchdog('Rest API', print_r($smartResult), WATCHDOG_INFO);
+    watchdog('Rest API', implode("|", $smartResult), WATCHDOG_INFO);
 
 //    $counter = 0;
 //    if (isset($smartResult['node'])) {
