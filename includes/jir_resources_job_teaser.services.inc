@@ -266,7 +266,8 @@ function get_job_teasers_resource_new($node) {
     $smartQuery->addExtraField('', 'title', null, 'node')
         ->addExtraField('field_employer_logo', 'uri');
 
-    $employer = json_decode(($smartQuery->execute())['node'][0], true);
+    $result = $smartQuery->execute();
+    $employer = json_decode($result['node'], true)[0];
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
     return array(
