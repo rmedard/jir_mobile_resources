@@ -140,7 +140,7 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->entityCondition('bundle', 'job')
         ->propertyCondition('status', NODE_PUBLISHED);
 
-    $smartQuery->addExtraField('', 'title')
+    $smartQuery->addExtraField('', 'title', null, 'node')
 //        ->addExtraField('', 'created')
 //        ->addExtraField('field_contact_name', 'value')
         ->addExtraField('field_posting_type', 'tid', null, 'field_data_field_posting_type')
