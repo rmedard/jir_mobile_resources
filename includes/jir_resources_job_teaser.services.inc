@@ -173,7 +173,7 @@ function job_teasers_list($pageSize, $search, $employerId)
 //    }
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
-    watchdog('Rest API', implode("|", $smartResult), WATCHDOG_INFO);
+    watchdog('Rest API', implode("|", $smartResult));
 
 //    $counter = 0;
 //    if (isset($smartResult['node'])) {
