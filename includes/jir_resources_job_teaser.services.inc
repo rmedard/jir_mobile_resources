@@ -160,6 +160,7 @@ function get_job_teaser_resource($node)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', intval($node->extraFields->field_employer_));
+
     $query->addExtraField('', 'title', null, 'node')
         ->addExtraField('field_employer_logo', 'fid');
 
@@ -199,6 +200,7 @@ function get_job_full_resource($node)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', $node->field_employer[LANGUAGE_NONE][0]['target_id']);
+
     $query->addExtraField('', 'title', null, 'node')
         ->addExtraField('field_employer_logo', 'fid')
         ->addExtraField('field_summary', 'value');
@@ -218,14 +220,16 @@ function get_job_full_resource($node)
         }
     }
 
+    $postingTypeTaxonomy = taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid']);
+
     $job = array(
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
         'path' => drupal_get_path_alias('node/' . $node->nid),
         'created_date' => format_date($node->created, 'short'),
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
-        'posting_type' => taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->name,
-        'posting_type_weight' => intval(taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid'])->weight),
+        'posting_type' => $postingTypeTaxonomy->name,
+        'posting_type_weight' => intval($postingTypeTaxonomy->weight),
         'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
         'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
