@@ -110,7 +110,7 @@ function job_teaser_resource_retrieve($nid)
 
     $smartResult = $smartQuery->execute();
 
-    watchdog('Rest API', "Executed...: " . $smartResult);
+    watchdog('Rest API', "Executed...: " . implode("|", $smartResult));
 
     $job = array();
     foreach ((object)$smartResult['node'] as $jobNode) {
