@@ -259,9 +259,14 @@ function get_job_teasers_resource_new($node)
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 
     $categories = array();
-    if (isset($node->extraFields->field_category_)) {
-        foreach ($node->extraFields->field_category_ as $category) {
-            array_push($categories, taxonomy_term_load($category)->name);
+    $categoryIds = $node->extraFields->field_category_;
+    if (isset($categoryIds)) {
+        if (is_array($categoryIds)) {
+            foreach ($categoryIds as $categoryId) {
+                array_push($categories, taxonomy_term_load($categoryId)->name);
+            }
+        } else {
+            array_push($categories, taxonomy_term_load($categoryIds)->name);
         }
     }
 
