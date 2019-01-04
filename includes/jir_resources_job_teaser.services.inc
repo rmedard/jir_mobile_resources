@@ -86,13 +86,54 @@ function job_teaser_resource()
  */
 function job_teaser_resource_retrieve($nid)
 {
-    $node = node_load($nid);
-    $job = array();
-    if ($node and is_object($node)) {
-        if ($node->type == 'job') {
-            $job = get_job_teasers_resource($node);
-        }
+    $smartQuery = new EntityFieldQueryExtraFields();
+    $smartQuery->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)->propertyCondition('nid', $nid);
+
+    $smartQuery->addExtraField('', 'title', null, 'node')
+        ->addExtraField('', 'created')
+//        ->addExtraField('field_contact_name', 'value')
+        ->addExtraField('field_posting_type', 'tid')
+        ->addExtraField('field_deadline_for_application', 'value')
+        ->addExtraField('field_contrat_type', 'tid')
+        ->addExtraField('field_desired_experience', 'tid')
+        ->addExtraField('field_offer_type', 'value')
+        ->addExtraField('field_category', 'tid')
+//        ->addExtraField('field_job_city', 'value')
+//        ->addExtraField('field_job_country', 'iso2')
+        ->addExtraField('field_is_featured_advert', 'value')
+        ->addExtraField('field_job_super_featured', 'value')
+        ->addExtraField('field_employer', 'target_id');
+    if (isset($search) and strlen(trim($search)) > 0) {
+        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
     }
+
+    if (isset($employerId) and intval($employerId) !== 0) {
+        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
+    }
+    try {
+        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+    } catch (EntityFieldQueryException $e) {
+        watchdog('error', $e);
+    }
+
+    $smartResult = $smartQuery->execute();
+
+    $job = array();
+    foreach ((object)$smartResult['node'] as $jobNode) {
+        $job = get_job_full_resource($jobNode);
+        break;
+    }
+
+//    $node = node_load($nid);
+//    $job = array();
+//    if ($node and is_object($node)) {
+//        if ($node->type == 'job') {
+//            $job = get_job_teasers_resource($node);
+//        }
+//    }
     return $job;
 }
 
@@ -148,7 +189,7 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->addExtraField('field_contrat_type', 'tid')
         ->addExtraField('field_desired_experience', 'tid')
         ->addExtraField('field_offer_type', 'value')
-        ->addExtraField('field_category', 'tid')
+//        ->addExtraField('field_category', 'tid')
 //        ->addExtraField('field_job_city', 'value')
 //        ->addExtraField('field_job_country', 'iso2')
         ->addExtraField('field_is_featured_advert', 'value')
@@ -258,18 +299,6 @@ function get_job_teasers_resource_new($node)
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 
-    $categories = array();
-    $categoryIds = $node->extraFields->field_category_;
-    if (isset($categoryIds)) {
-        if (is_array($categoryIds)) {
-            foreach ($categoryIds as $categoryId) {
-                array_push($categories, taxonomy_term_load($categoryId)->name);
-            }
-        } else {
-            array_push($categories, taxonomy_term_load($categoryIds)->name);
-        }
-    }
-
     return array(
         'job_title' => $node->extraFields->title,
         'job_id' => intval($node->nid),
@@ -278,7 +307,7 @@ function get_job_teasers_resource_new($node)
 //        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingType->name,
         'posting_type_weight' => intval($postingType->weight),
-        'category' => $categories,
+//        'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->extraFields->field_deadline_for_application_)),
 //        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
 //        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
@@ -306,13 +335,33 @@ function get_job_full_resource($node)
 {
 
     $categories = array();
-    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
-        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
-            array_push($categories, taxonomy_term_load($category['tid'])->name);
+    $categoryIds = $node->extraFields->field_category_;
+    if (isset($categoryIds)) {
+        if (is_array($categoryIds)) {
+            foreach ($categoryIds as $categoryId) {
+                array_push($categories, taxonomy_term_load($categoryId)->name);
+            }
+        } else {
+            array_push($categories, taxonomy_term_load($categoryIds)->name);
         }
     }
 
+    $query = new EntityFieldQueryExtraFields();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'employer')
+        ->propertyCondition('nid', intval($node->extraFields->field_employer_));
+    $query->addExtraField('', 'title', null, 'node')
+        ->addExtraField('field_employer_logo', 'fid')
+        ->addExtraField('field_summary', 'value');
+
+    $result = $query->execute();
+
     $employer = new stdClass();
+    foreach ((object)$result['node'] as $emp) {
+        $employer = $emp;
+        break;
+    }
+
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
     return array(
         'job_title' => $node->extraFields->title,
@@ -341,7 +390,7 @@ function get_job_full_resource($node)
             'id' => intval($employer->nid),
             'name' => $employer->extraFields->title,
             'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
-            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
+            'description' => $employer->extraFields->field_summary_,
         )
     );
 }
