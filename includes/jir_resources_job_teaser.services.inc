@@ -168,35 +168,12 @@ function job_teasers_list($pageSize, $search, $employerId)
         watchdog('error', $e);
     }
 
-//    drupal_add_http_header('X-finished', '0');
-//    if ($counter === 0 or $counter != $pageSize) {
-//        drupal_add_http_header('X-finished', '1');
-//    }
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
     $jobNodes = array();
-    watchdog('Rest API', $jobNodes);
-//    $raw = json_decode($smartResult['node'], true);
-    $raw = (object) $smartResult['node'];
-    foreach ($raw as $jobNode) {
-//        watchdog('Rest API', $jobNode);
-//        $job = reset($jobNode);
+    foreach ((object) $smartResult['node'] as $jobNode) {
         array_push($jobNodes, get_job_teasers_resource_new($jobNode));
     }
-
-//    watchdog('Rest API', json_encode($smartResult['node']));
-
-//    $counter = 0;
-//    if (isset($smartResult['node'])) {
-//        $jobs_details = array_keys($result['node']);
-////        $resultFields = array();
-////        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
-//        foreach ($jobs_details as $job) {
-//            array_push($jobs, get_job_teasers_resource($job));
-//            $counter++;
-//        }
-//    }
-
     return $jobNodes;
 }
 
@@ -271,7 +248,6 @@ function get_job_teasers_resource_new($node) {
         ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
-//    $rwaEmp = (object) $result['node'];
     $employer = new stdClass();
     foreach ((object) $result['node'] as $emp) {
         $employer = $emp;
