@@ -258,12 +258,12 @@ function get_job_teasers_resource_new($node)
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 
-//    $categories = array();
-//    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
-//        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
-//            array_push($categories, taxonomy_term_load($category['tid'])->name);
-//        }
-//    }
+    $categories = array();
+    if (isset($node->extraFields->field_category_)) {
+        foreach ($node->extraFields->field_category_ as $category) {
+            array_push($categories, taxonomy_term_load($category)->name);
+        }
+    }
 
     return array(
         'job_title' => $node->extraFields->title,
@@ -273,7 +273,7 @@ function get_job_teasers_resource_new($node)
 //        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingType->name,
         'posting_type_weight' => intval($postingType->weight),
-        'category' => $node->extraFields->field_category_,
+        'category' => $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->extraFields->field_deadline_for_application_)),
 //        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
 //        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
