@@ -181,7 +181,7 @@ function job_teasers_list($pageSize, $search, $employerId)
 
         watchdog('Rest API', $jobNode);
 //        $job = json_decode($jobNode, true);
-        array_push($jobNodes, get_job_teasers_resource_new($jobNode));
+//        array_push($jobNodes, get_job_teasers_resource_new($jobNode));
     }
 
 //    watchdog('Rest API', json_encode($smartResult['node']));
