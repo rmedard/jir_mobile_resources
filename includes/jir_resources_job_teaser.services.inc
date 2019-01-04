@@ -152,8 +152,7 @@ function job_teasers_list($pageSize, $search, $employerId)
 //        ->addExtraField('field_job_country', 'iso2')
         ->addExtraField('field_is_featured_advert', 'value')
         ->addExtraField('field_job_super_featured', 'value')
-        ->addExtraField('field_employer', 'target_id')
-    ;
+        ->addExtraField('field_employer', 'target_id');
     if (isset($search) and strlen(trim($search)) > 0) {
         $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
     }
@@ -171,7 +170,7 @@ function job_teasers_list($pageSize, $search, $employerId)
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
     $jobNodes = array();
-    foreach ((object) $smartResult['node'] as $jobNode) {
+    foreach ((object)$smartResult['node'] as $jobNode) {
         array_push($jobNodes, get_job_teasers_resource_new($jobNode));
     }
     return $jobNodes;
@@ -239,22 +238,33 @@ function get_job_teasers_resource($node)
     return $job;
 }
 
-function get_job_teasers_resource_new($node) {
+function get_job_teasers_resource_new($node)
+{
     $query = new EntityFieldQueryExtraFields();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', intval($node->extraFields->field_employer_));
     $query->addExtraField('', 'title', null, 'node')
-        ->addExtraField('field_employer_logo', 'fid');
+        ->addExtraField('field_employer_logo', 'fid')
+        ->addExtraField('field_category', 'tid');
 
     $result = $query->execute();
+
     $employer = new stdClass();
-    foreach ((object) $result['node'] as $emp) {
+    foreach ((object)$result['node'] as $emp) {
         $employer = $emp;
         break;
     }
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
+
+//    $categories = array();
+//    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
+//        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
+//            array_push($categories, taxonomy_term_load($category['tid'])->name);
+//        }
+//    }
+
     return array(
         'job_title' => $node->extraFields->title,
         'job_id' => intval($node->nid),
@@ -263,7 +273,7 @@ function get_job_teasers_resource_new($node) {
 //        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingType->name,
         'posting_type_weight' => intval($postingType->weight),
-//        'category' => $categories,
+        'category' => $node->extraFields->category,
         'deadline' => date('Y-m-d H:i', strtotime($node->extraFields->field_deadline_for_application_)),
 //        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
 //        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
@@ -283,6 +293,50 @@ function get_job_teasers_resource_new($node) {
             'name' => $employer->extraFields->title,
             'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
 //            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
+        )
+    );
+}
+
+function get_job_full_resource($node)
+{
+
+    $categories = array();
+    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
+        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
+            array_push($categories, taxonomy_term_load($category['tid'])->name);
+        }
+    }
+
+    $employer = new stdClass();
+    $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
+    return array(
+        'job_title' => $node->extraFields->title,
+        'job_id' => intval($node->nid),
+        'path' => drupal_get_path_alias('node/' . $node->nid),
+        'created_date' => format_date($node->created, 'short'),
+//        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
+        'posting_type' => $postingType->name,
+        'posting_type_weight' => intval($postingType->weight),
+        'category' => $categories,
+        'deadline' => date('Y-m-d H:i', strtotime($node->extraFields->field_deadline_for_application_)),
+//        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
+        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
+        'contract_type' => taxonomy_term_load($node->extraFields->field_contrat_type_)->name,
+        'desired_experience' => taxonomy_term_load($node->extraFields->field_desired_experience_)->name,
+        'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
+        'offer_type' => $node->extraFields->field_offer_type_,
+//        'city' => $node->field_job_city[LANGUAGE_NONE][0]['safe_value'],
+//        'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
+        'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
+//        'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
+        'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
+        'is_featured_advert' => boolval($node->extraFields->field_is_featured_advert_),
+        'is_super_featured' => boolval($node->extraFields->field_job_super_featured_),
+        'employer' => array(
+            'id' => intval($employer->nid),
+            'name' => $employer->extraFields->title,
+            'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
+            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
         )
     );
 }
