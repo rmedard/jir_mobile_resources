@@ -92,7 +92,7 @@ function job_teaser_resource_retrieve($nid)
         ->propertyCondition('status', NODE_PUBLISHED)->propertyCondition('nid', $nid);
 
     $smartQuery->addExtraField('', 'title', null, 'node')
-        ->addExtraField('', 'created')
+        ->addExtraField('', 'created', null, 'node')
 //        ->addExtraField('field_contact_name', 'value')
         ->addExtraField('field_posting_type', 'tid')
         ->addExtraField('field_deadline_for_application', 'value')
