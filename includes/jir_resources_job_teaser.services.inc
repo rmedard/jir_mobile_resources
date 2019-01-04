@@ -107,23 +107,10 @@ function job_teaser_resource_retrieve($nid)
         ->addExtraField('field_job_super_featured', 'value')
         ->addExtraField('field_employer', 'target_id')
     ;
-//    if (isset($search) and strlen(trim($search)) > 0) {
-//        $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
-//    }
-
-//    if (isset($employerId) and intval($employerId) !== 0) {
-//        $smartQuery->fieldCondition('field_employer', 'target_id', intval($employerId));
-//    }
-//    try {
-//        $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
-//            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
-//    } catch (EntityFieldQueryException $e) {
-//        watchdog('error', $e);
-//    }
 
     $smartResult = $smartQuery->execute();
 
-    watchdog('Rest API', json_encode($smartResult));
+    watchdog('Rest API', $smartResult);
 
     $job = array();
     foreach ((object)$smartResult['node'] as $jobNode) {
