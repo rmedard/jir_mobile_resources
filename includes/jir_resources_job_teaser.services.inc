@@ -104,7 +104,8 @@ function job_teaser_resource_retrieve($nid)
 //        ->addExtraField('field_job_country', 'iso2')
         ->addExtraField('field_is_featured_advert', 'value')
         ->addExtraField('field_job_super_featured', 'value')
-        ->addExtraField('field_employer', 'target_id');
+        ->addExtraField('field_employer', 'target_id')
+    ;
     if (isset($search) and strlen(trim($search)) > 0) {
         $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
     }
@@ -120,6 +121,8 @@ function job_teaser_resource_retrieve($nid)
     }
 
     $smartResult = $smartQuery->execute();
+
+    watchdog('Rest API', json_encode($smartResult));
 
     $job = array();
     foreach ((object)$smartResult['node'] as $jobNode) {
