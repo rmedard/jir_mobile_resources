@@ -271,16 +271,14 @@ function get_job_teasers_resource_new($node) {
         ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
-    $rwaEmp = (object) $result['node'];
-    $employer = null;
-    foreach ($rwaEmp as $emp) {
+//    $rwaEmp = (object) $result['node'];
+    $employer = new stdClass();
+    foreach ((object) $result['node'] as $emp) {
         $employer = $emp;
         break;
     }
-//    $employer = json_decode($result['node'], true);
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
-//    $extraFields = json_decode($node->extraFields, true);
     return array(
         'job_title' => $node->extraFields->title,
         'job_id' => intval($node->nid),
