@@ -273,7 +273,7 @@ function get_job_teasers_resource_new($node)
 //        'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingType->name,
         'posting_type_weight' => intval($postingType->weight),
-        'category' => $node->extraFields->category,
+        'category' => $node->extraFields->field_category_,
         'deadline' => date('Y-m-d H:i', strtotime($node->extraFields->field_deadline_for_application_)),
 //        'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
 //        'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
