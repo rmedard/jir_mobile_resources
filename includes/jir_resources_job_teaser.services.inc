@@ -178,8 +178,8 @@ function job_teasers_list($pageSize, $search, $employerId)
     watchdog('Rest API', $jobNodes);
     foreach (json_decode($smartResult['node'], true) as $jobNode) {
 //        watchdog('Rest API', $jobNode);
-        $job = reset($jobNode);
-        array_push($jobNodes, get_job_teasers_resource_new($job));
+//        $job = reset($jobNode);
+        array_push($jobNodes, get_job_teasers_resource_new($jobNode));
     }
 
 //    watchdog('Rest API', json_encode($smartResult['node']));
@@ -269,7 +269,12 @@ function get_job_teasers_resource_new($node) {
         ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
-    $employer = reset(reset(json_decode($result['node'], true)));
+    $employer = null;
+    foreach (json_decode($result['node'], true) as $emp) {
+        $employer = $emp;
+        break;
+    }
+//    $employer = json_decode($result['node'], true);
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 //    $extraFields = json_decode($node->extraFields, true);
