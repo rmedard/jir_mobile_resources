@@ -102,37 +102,37 @@ function job_teaser_resource_retrieve($nid)
  */
 function job_teasers_list($pageSize, $search, $employerId)
 {
-    $jobs = array();
-    $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'node')
-        ->entityCondition('bundle', 'job')
-        ->propertyCondition('status', NODE_PUBLISHED);
-
-    if (isset($search) and strlen(trim($search)) > 0) {
-        $query->addTag('job_or_employer_title')->addMetaData('search', $search);
-    }
-
-    if (isset($employerId) and intval($employerId) !== 0) {
-        $query->fieldCondition('field_employer', 'target_id', intval($employerId));
-    }
-    try {
-        $query->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
-            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
-    } catch (EntityFieldQueryException $e) {
-        watchdog('error', $e);
-    }
-    $result = $query->pager($pageSize)->execute();
-
-    $counter = 0;
-    if (isset($result['node'])) {
-        $jobs_ids = array_keys($result['node']);
-//        $resultFields = array();
-//        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
-        foreach (entity_load('node', $jobs_ids) as $job) {
-            array_push($jobs, get_job_teasers_resource($job));
-            $counter++;
-        }
-    }
+//    $jobs = array();
+//    $query = new EntityFieldQuery();
+//    $query->entityCondition('entity_type', 'node')
+//        ->entityCondition('bundle', 'job')
+//        ->propertyCondition('status', NODE_PUBLISHED);
+//
+//    if (isset($search) and strlen(trim($search)) > 0) {
+//        $query->addTag('job_or_employer_title')->addMetaData('search', $search);
+//    }
+//
+//    if (isset($employerId) and intval($employerId) !== 0) {
+//        $query->fieldCondition('field_employer', 'target_id', intval($employerId));
+//    }
+//    try {
+//        $query->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
+//            ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
+//    } catch (EntityFieldQueryException $e) {
+//        watchdog('error', $e);
+//    }
+//    $result = $query->pager($pageSize)->execute();
+//
+//    $counter = 0;
+//    if (isset($result['node'])) {
+//        $jobs_ids = array_keys($result['node']);
+////        $resultFields = array();
+////        field_attach_load('node', $result['node'], FIELD_LOAD_CURRENT, $resultFields);
+//        foreach (entity_load('node', $jobs_ids) as $job) {
+//            array_push($jobs, get_job_teasers_resource($job));
+//            $counter++;
+//        }
+//    }
 
 
     $smartQuery = new EntityFieldQueryExtraFields();
@@ -177,12 +177,13 @@ function job_teasers_list($pageSize, $search, $employerId)
     $jobNodes = array();
     foreach ($smartResult['node'] as $jobNode) {
 
-        $job = json_decode($jobNode, true);
+
         watchdog('Rest API', $jobNode);
+        $job = json_decode($jobNode, true);
         array_push($jobNodes, get_job_teasers_resource_new($job));
     }
 
-    watchdog('Rest API', json_encode($smartResult['node']));
+//    watchdog('Rest API', json_encode($smartResult['node']));
 
 //    $counter = 0;
 //    if (isset($smartResult['node'])) {
