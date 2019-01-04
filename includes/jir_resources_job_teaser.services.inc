@@ -175,6 +175,7 @@ function job_teasers_list($pageSize, $search, $employerId)
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
     $jobNodes = array();
+    watchdog('Rest API', $jobNodes);
     foreach ($smartResult['node'] as $jobNode) {
 
 
@@ -302,6 +303,6 @@ function get_job_teasers_resource_new($node) {
             'name' => json_decode($employer->extraFields, true)['title'],
             'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
 //            'description' => isset($employer->field_summary[LANGUAGE_NONE]) ? $employer->field_summary[LANGUAGE_NONE][0]['value'] : '',
-        ),
+        )
     );
 }
