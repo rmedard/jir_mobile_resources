@@ -89,9 +89,9 @@ function job_teaser_resource_retrieve($nid)
     $smartQuery = new EntityFieldQueryExtraFields();
     $smartQuery->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
-//        ->entityCondition('entity_id', intval($nid))
+        ->entityCondition('entity_id', intval($nid))
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->propertyCondition('nid', intval($nid))
+//        ->propertyCondition('nid', intval($nid))
     ;
 
     $smartQuery->addExtraField('', 'title', null, 'node')
