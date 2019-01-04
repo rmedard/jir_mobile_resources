@@ -148,6 +148,7 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->addExtraField('field_contrat_type', 'tid')
         ->addExtraField('field_desired_experience', 'tid')
         ->addExtraField('field_offer_type', 'value')
+        ->addExtraField('field_category', 'tid')
 //        ->addExtraField('field_job_city', 'value')
 //        ->addExtraField('field_job_country', 'iso2')
         ->addExtraField('field_is_featured_advert', 'value')
@@ -245,8 +246,7 @@ function get_job_teasers_resource_new($node)
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', intval($node->extraFields->field_employer_));
     $query->addExtraField('', 'title', null, 'node')
-        ->addExtraField('field_employer_logo', 'fid')
-        ->addExtraField('field_category', 'tid');
+        ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
 
