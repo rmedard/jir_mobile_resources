@@ -269,7 +269,7 @@ function get_job_teasers_resource_new($node) {
         ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
-    $employer = reset(json_decode($result['node'], true));
+    $employer = reset(reset(json_decode($result['node'], true)));
     $employerLogoUri = $employer->extraFields->field_employer_logo_;
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 //    $extraFields = json_decode($node->extraFields, true);
