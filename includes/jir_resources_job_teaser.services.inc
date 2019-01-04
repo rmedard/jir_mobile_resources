@@ -89,7 +89,7 @@ function job_teaser_resource_retrieve($nid)
     $smartQuery = new EntityFieldQueryExtraFields();
     $smartQuery->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
-        ->propertyCondition('vid', intval($nid))
+        ->propertyCondition('vid', $nid)
         ->propertyCondition('status', NODE_PUBLISHED)
 //        ->propertyCondition('nid', intval($nid))
     ;
