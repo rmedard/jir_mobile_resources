@@ -176,7 +176,8 @@ function job_teasers_list($pageSize, $search, $employerId)
 
     $jobNodes = array();
     watchdog('Rest API', $jobNodes);
-    foreach (json_decode($smartResult['node'], true) as $jobNode) {
+    $raw = json_decode($smartResult['node'], true);
+    foreach ($raw as $jobNode) {
 //        watchdog('Rest API', $jobNode);
 //        $job = reset($jobNode);
         array_push($jobNodes, get_job_teasers_resource_new($jobNode));
@@ -269,8 +270,9 @@ function get_job_teasers_resource_new($node) {
         ->addExtraField('field_employer_logo', 'fid');
 
     $result = $query->execute();
+    $rwaEmp = json_decode($result['node'], true);
     $employer = null;
-    foreach (json_decode($result['node'], true) as $emp) {
+    foreach ($rwaEmp as $emp) {
         $employer = $emp;
         break;
     }
