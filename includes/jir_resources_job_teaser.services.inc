@@ -201,9 +201,7 @@ function get_job_full_resource($node)
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', $node->field_employer[LANGUAGE_NONE][0]['target_id']);
 
-    $query->addExtraField('', 'title', null, 'node')
-        ->addExtraField('field_employer_logo', 'fid')
-        ->addExtraField('field_summary', 'value');
+    $query->addExtraField('field_summary', 'value');
 
     $result = $query->execute();
 
@@ -220,7 +218,7 @@ function get_job_full_resource($node)
         }
     }
 
-    $employerLogoUri = $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'];
+//    $employerLogoUri = $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'];
     $postingTypeTaxonomy = taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid']);
 
     $job = array(
@@ -248,9 +246,7 @@ function get_job_full_resource($node)
         'is_super_featured' => boolval($node->field_job_super_featured[LANGUAGE_NONE][0]['value']),
         'employer' => array(
             'id' => intval($employer->nid),
-            'name' => $employer->extraFields->title,
-            'logo_url' => isset($employerLogoUri) ? image_style_url('logo_scaler_new', $employerLogoUri) : '',
-            'description' => $employer->extraFields->field_summary_,
+            'description' => $employer->extraFields->field_summary_
         )
     );
     return $job;
