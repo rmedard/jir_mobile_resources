@@ -220,6 +220,7 @@ function get_job_full_resource($node)
         }
     }
 
+    $employerLogoUri = $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'];
     $postingTypeTaxonomy = taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid']);
 
     $job = array(
