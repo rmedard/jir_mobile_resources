@@ -176,9 +176,9 @@ function job_teasers_list($pageSize, $search, $employerId)
 
     $jobNodes = array();
     watchdog('Rest API', $jobNodes);
-    foreach ($smartResult['node'] as $jobNode) {
+    foreach (json_decode($smartResult['node'], true) as $jobNode) {
 //        watchdog('Rest API', $jobNode);
-        $job = reset(json_decode($jobNode, true));
+        $job = reset($jobNode);
         array_push($jobNodes, get_job_teasers_resource_new($job));
     }
 
