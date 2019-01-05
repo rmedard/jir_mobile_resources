@@ -172,8 +172,6 @@ function get_job_teaser_resource($node)
         break;
     }
     $employerLogo = file_load($employer->extraFields->field_employer_logo_);
-//    $logo = file_load($employer->extraFields->field_employer_logo_);
-
     $postingType = taxonomy_term_load($node->extraFields->field_posting_type_);
 
     return array(
@@ -191,7 +189,6 @@ function get_job_teaser_resource($node)
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->extraFields->title,
-            'logo_uri' => $employerLogo->uri,
             'logo_url' => isset($employerLogo) ? image_style_url('logo_scaler_new', $employerLogo->uri) : '',
         )
     );
