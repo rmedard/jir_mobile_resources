@@ -220,6 +220,8 @@ function get_job_full_resource($node)
 
     $postingTypeTaxonomy = taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid']);
 
+    statistics_node_view($node, 'full');
+
     $job = array(
         'job_title' => $node->title,
         'job_id' => intval($node->nid),
