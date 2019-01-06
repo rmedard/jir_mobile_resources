@@ -189,6 +189,7 @@ function get_job_teaser_resource($node)
         'employer' => array(
             'id' => intval($employer->nid),
             'name' => $employer->extraFields->title,
+            'uri' => $employer->extraFields->field_employer_logo_,
             'logo_url' => isset($employerLogo) ? image_style_url('logo_scaler_new', $employerLogo->uri) : '',
         )
     );
