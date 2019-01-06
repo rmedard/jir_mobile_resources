@@ -218,7 +218,6 @@ function get_job_full_resource($node)
         }
     }
 
-//    $employerLogoUri = $employer->field_employer_logo[LANGUAGE_NONE][0]['uri'];
     $postingTypeTaxonomy = taxonomy_term_load($node->field_posting_type[LANGUAGE_NONE][0]['tid']);
 
     $job = array(
@@ -244,6 +243,7 @@ function get_job_full_resource($node)
         'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
         'is_featured_advert' => boolval($node->field_is_featured_advert[LANGUAGE_NONE][0]['value']),
         'is_super_featured' => boolval($node->field_job_super_featured[LANGUAGE_NONE][0]['value']),
+        'total_views_count' => statistics_get($node->nid),
         'employer' => array(
             'id' => intval($employer->nid),
             'description' => $employer->extraFields->field_summary_
