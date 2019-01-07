@@ -255,7 +255,7 @@ function get_job_full_resource($node)
         'employer' => array(
             'id' => intval($employerNode->nid),
             'description' => $employerNode->field_summary[LANGUAGE_NONE][0]['safe_value'],
-            'website' => $employerNode->field_employer_websitey[LANGUAGE_NONE][0]['url']
+            'website' => $employerNode->field_employer_website[LANGUAGE_NONE][0]['value']
         )
     );
     return $job;
