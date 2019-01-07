@@ -207,7 +207,7 @@ function get_job_full_resource($node)
     }
 
     $employerCategories = array();
-    if (isset($employerNode->field_category[LANGUAGE_NONE]) and count($employerNode->field_category[LANGUAGE_NONE]) > 0) {
+    if (isset($employerNode->field_category) and count($employerNode->field_category[LANGUAGE_NONE]) > 0) {
         foreach ($employerNode->field_category[LANGUAGE_NONE] as $category) {
             array_push($employerCategories, taxonomy_term_load($category['tid'])->name);
         }
