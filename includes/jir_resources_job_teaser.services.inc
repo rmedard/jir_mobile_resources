@@ -206,6 +206,8 @@ function get_job_full_resource($node)
 
     $result = $query->execute();
 
+    watchdog('Rest API', json_encode($result));
+
     $employer = new stdClass();
     foreach ((object)$result['node'] as $emp) {
         $employer = $emp;
