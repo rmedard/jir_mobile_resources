@@ -202,7 +202,7 @@ function get_job_full_resource($node)
         ->propertyCondition('nid', $node->field_employer[LANGUAGE_NONE][0]['target_id']);
 
     $query->addExtraField('field_summary', 'value')
-        ->addExtraField('field_employer_website', 'value');
+        ->addExtraField('field_employer_website', 'url');
 
     $result = $query->execute();
 
