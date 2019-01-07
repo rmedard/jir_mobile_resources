@@ -210,7 +210,7 @@ function get_job_full_resource($node)
 
 
     $employerNode = node_load($node->field_employer[LANGUAGE_NONE][0]['target_id']);
-
+    watchdog('Rest API', json_encode($employerNode));
 //    $employer = new stdClass();
 //    foreach ((object)$result['node'] as $emp) {
 //        $employer = $emp;
