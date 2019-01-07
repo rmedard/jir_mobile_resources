@@ -250,7 +250,7 @@ function get_job_full_resource($node)
         'employer' => array(
             'id' => intval($employer->nid),
             'description' => $employer->extraFields->field_summary_,
-            'website' => $employer->extraFields->field_employer_website_
+//            'website' => $employer->extraFields->field_employer_website_
         )
     );
     return $job;
