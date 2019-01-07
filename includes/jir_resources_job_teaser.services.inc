@@ -231,7 +231,7 @@ function get_job_full_resource($node)
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingTypeTaxonomy->name,
         'posting_type_weight' => intval($postingTypeTaxonomy->weight),
-        'category' => $categories,
+        'category' => empty($categories) ? 'Not specified' : $categories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
         'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
         'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
