@@ -201,7 +201,8 @@ function get_job_full_resource($node)
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('nid', $node->field_employer[LANGUAGE_NONE][0]['target_id']);
 
-    $query->addExtraField('field_summary', 'value');
+    $query->addExtraField('field_summary', 'value')
+        ->addExtraField('field_employer_website', 'url');
 
     $result = $query->execute();
 
@@ -248,7 +249,8 @@ function get_job_full_resource($node)
         'total_views_count' => intval(statistics_get($node->nid)['totalcount']),
         'employer' => array(
             'id' => intval($employer->nid),
-            'description' => $employer->extraFields->field_summary_
+            'description' => $employer->extraFields->field_summary_,
+            'website' => $employer->extraFields->field_employer_website_
         )
     );
     return $job;
