@@ -199,10 +199,17 @@ function get_job_full_resource($node)
     $employerNode = node_load($node->field_employer[LANGUAGE_NONE][0]['target_id']);
     watchdog('Rest API', json_encode($employerNode));
 
-    $categories = array();
+    $jobCategories = array();
     if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
         foreach ($node->field_category[LANGUAGE_NONE] as $category) {
-            array_push($categories, taxonomy_term_load($category['tid'])->name);
+            array_push($jobCategories, taxonomy_term_load($category['tid'])->name);
+        }
+    }
+
+    $employerCategories = array();
+    if (isset($employerNode->field_category[LANGUAGE_NONE]) and count($employerNode->field_category[LANGUAGE_NONE]) > 0) {
+        foreach ($employerNode->field_category[LANGUAGE_NONE] as $category) {
+            array_push($employerCategories, taxonomy_term_load($category['tid'])->name);
         }
     }
 
@@ -218,7 +225,7 @@ function get_job_full_resource($node)
         'contact_name' => $node->field_contact_name[LANGUAGE_NONE][0]['value'],
         'posting_type' => $postingTypeTaxonomy->name,
         'posting_type_weight' => intval($postingTypeTaxonomy->weight),
-        'category' => empty($categories) ? 'Not specified' : $categories,
+        'category' => empty($jobCategories) ? 'Not specified' : $jobCategories,
         'deadline' => date('Y-m-d H:i', strtotime($node->field_deadline_for_application[LANGUAGE_NONE][0]['value'])),
         'additional_email_cv' => isset($node->field_additional_email_where_to[LANGUAGE_NONE]) ? $node->field_additional_email_where_to[LANGUAGE_NONE][0]['email'] : '',
         'number_of_positions' => intval($node->field_number_of_positions[LANGUAGE_NONE][0]['value']),
@@ -236,6 +243,7 @@ function get_job_full_resource($node)
         'total_views_count' => intval(statistics_get($node->nid)['totalcount']),
         'employer' => array(
             'id' => intval($employerNode->nid),
+            'sector' => empty($employerCategories) ? null : $employerCategories,
             'description' => isset($employerNode->field_summary) ? $employerNode->field_summary[LANGUAGE_NONE][0]['safe_value'] : null,
             'website' => isset($employerNode->field_employer_website) ? $employerNode->field_employer_website[LANGUAGE_NONE][0]['url'] : null
         )
