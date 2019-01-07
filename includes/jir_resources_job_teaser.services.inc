@@ -243,7 +243,7 @@ function get_job_full_resource($node)
         'total_views_count' => intval(statistics_get($node->nid)['totalcount']),
         'employer' => array(
             'id' => intval($employerNode->nid),
-            'sector' => empty($employerCategories) ? null : $employerCategories,
+            'sector' => $employerCategories,
             'description' => isset($employerNode->field_summary) ? $employerNode->field_summary[LANGUAGE_NONE][0]['safe_value'] : null,
             'website' => isset($employerNode->field_employer_website) ? $employerNode->field_employer_website[LANGUAGE_NONE][0]['url'] : null
         )
