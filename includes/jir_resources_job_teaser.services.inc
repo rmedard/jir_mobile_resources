@@ -196,26 +196,8 @@ function get_job_teaser_resource($node)
 
 function get_job_full_resource($node)
 {
-//    $query = new EntityFieldQueryExtraFields();
-//    $query->entityCondition('entity_type', 'node')
-//        ->entityCondition('bundle', 'employer')
-//        ->propertyCondition('nid', $node->field_employer[LANGUAGE_NONE][0]['target_id']);
-//
-//    $query->addExtraField('field_summary', 'value')
-//        ->addExtraField('field_employer_website', 'url');
-//
-//    $result = $query->execute();
-//
-//    watchdog('Rest API', json_encode($result));
-
-
     $employerNode = node_load($node->field_employer[LANGUAGE_NONE][0]['target_id']);
     watchdog('Rest API', json_encode($employerNode));
-//    $employer = new stdClass();
-//    foreach ((object)$result['node'] as $emp) {
-//        $employer = $emp;
-//        break;
-//    }
 
     $categories = array();
     if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
@@ -244,8 +226,8 @@ function get_job_full_resource($node)
         'desired_experience' => taxonomy_term_load($node->field_desired_experience[LANGUAGE_NONE][0]['tid'])->name,
         'desired_education_level' => taxonomy_term_load($node->field_desired_education_level[LANGUAGE_NONE][0]['tid'])->name,
         'offer_type' => $node->field_offer_type[LANGUAGE_NONE][0]['value'],
-        'city' => trim($node->field_job_city[LANGUAGE_NONE][0]['safe_value']),
-        'country' => $node->field_job_country[LANGUAGE_NONE][0]['iso2'],
+        'city' => isset($node->field_job_city) ? trim($node->field_job_city[LANGUAGE_NONE][0]['safe_value']) : '',
+        'country' => isset($node->field_job_country) ? $node->field_job_country[LANGUAGE_NONE][0]['iso2'] : '',
         'action_apply_default_url' => $node->field_apply_default[LANGUAGE_NONE][0]['url'],
         'application_form_type' => taxonomy_term_load($node->field_application_form_type[LANGUAGE_NONE][0]['tid'])->name,
         'body' => $node->body[LANGUAGE_NONE][0]['safe_value'],
@@ -254,8 +236,8 @@ function get_job_full_resource($node)
         'total_views_count' => intval(statistics_get($node->nid)['totalcount']),
         'employer' => array(
             'id' => intval($employerNode->nid),
-            'description' => $employerNode->field_summary[LANGUAGE_NONE][0]['safe_value'],
-            'website' => $employerNode->field_employer_website[LANGUAGE_NONE][0]['url']
+            'description' => isset($employerNode->field_summary) ? $employerNode->field_summary[LANGUAGE_NONE][0]['safe_value'] : null,
+            'website' => isset($employerNode->field_employer_website) ? $employerNode->field_employer_website[LANGUAGE_NONE][0]['url'] : null
         )
     );
     return $job;
