@@ -77,8 +77,15 @@ function employer_teaser_resource() {
     return $api_employer;
 }
 
-function employer_teaser_resource_retrieve () {
-
+function employer_teaser_resource_retrieve ($nid) {
+    $node = node_load($nid);
+    $employer = array();
+    if ($node and is_object($node)) {
+        if ($node->type == 'employer') {
+            $employer = get_employer_full_resource($node);
+        }
+    }
+    return $employer;
 }
 
 function employer_teasers_list ($page, $pageSize, $search) {
@@ -120,4 +127,19 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
         $query->join('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
         $query->Join('node', 'n', 'e.entity_id = n.nid AND n.status = :status', array('status' => NODE_PUBLISHED));
     }
+}
+
+function get_employer_full_resource($node) {
+    $employerCategories = array();
+    if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
+        foreach ($node->field_category[LANGUAGE_NONE] as $category) {
+            array_push($employerCategories, taxonomy_term_load($category['tid'])->name);
+        }
+    }
+    return array(
+        'id' => intval($node->nid),
+        'sector' => $employerCategories,
+        'description' => isset($node->field_summary) ? $node->field_summary[LANGUAGE_NONE][0]['safe_value'] : null,
+        'website' => isset($node->field_employer_website) ? $node->field_employer_website[LANGUAGE_NONE][0]['url'] : null
+    );
 }

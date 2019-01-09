@@ -197,7 +197,6 @@ function get_job_teaser_resource($node)
 function get_job_full_resource($node)
 {
     $employerNode = node_load($node->field_employer[LANGUAGE_NONE][0]['target_id']);
-    watchdog('Rest API', json_encode($employerNode));
 
     $jobCategories = array();
     if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
