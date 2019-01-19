@@ -80,7 +80,13 @@ function job_teaser_resource()
                     ),
                     'callback' => 'advert_types_statistics',
                     'access callback' => 'user_is_logged_in',
-                    'args' => array()
+                    'args' => array(
+                        'name' => 'advert_stats',
+                        'type' => 'string',
+                        'description' => 'Function to perform',
+                        'optional' => FALSE,
+                        'source' => array('path' => '0'),
+                    )
                 )
             ),
         ),
