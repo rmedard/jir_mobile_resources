@@ -79,7 +79,8 @@ function job_teaser_resource()
                         'name' => 'includes/jir_resources_job_teaser.services',
                     ),
                     'callback' => 'advert_types_statistics',
-                    'access callback' => 'user_is_logged_in'
+                    'access callback' => 'user_is_logged_in',
+                    'args' => array()
                 )
             ),
         ),
