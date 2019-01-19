@@ -376,7 +376,9 @@ function jir_mobile_resources_query_consultancy_or_freelance_alter(QueryAlterabl
  */
 function jir_mobile_resources_query_public_sector_job_alter(QueryAlterableInterface $query)
 {
-    $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
-    $query->leftjoin('field_data_field_employer_public_employer', 'p',
-        'e.field_employer_target_id = p.entity_id and p.field_employer_public_employer_value = 1');
+    if ($query instanceof SelectQueryInterface) {
+        $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
+        $query->leftjoin('field_data_field_employer_public_employer', 'p',
+            'e.field_employer_target_id = p.entity_id and p.field_employer_public_employer_value = :public', array('public' => 1));
+    }
 }
