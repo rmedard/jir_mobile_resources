@@ -264,7 +264,6 @@ function get_job_full_resource($node)
 }
 
 function advert_types_statistics() {
-    watchdog('Rest API', 'In stats...');
     $query1 = new EntityFieldQuery();
     $featured = $query1->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
@@ -324,16 +323,15 @@ function advert_types_statistics() {
         ->fieldCondition('field_offer_type', 'value', 'Other')
         ->count()->execute();
 
-    watchdog('Rest API', $featured);
-
     return array(
-        'FEATURED' => $featured,
-        'JOBS' => $jobs,
-        'TENDERS', $tenders,
-        'INTERNSHIP' => $internship,
-        'CONSULTANCY' => $consultancy,
-        'OTHERS'=> $others,
-        'PUBLIC' => $publics);
+        'FEATURED' => intval($featured),
+        'JOBS' => intval($jobs),
+        'TENDERS'=> intval($tenders),
+        'INTERNSHIP' => intval($internship),
+        'CONSULTANCY' => intval($consultancy),
+        'OTHERS'=> intval($others),
+        'PUBLIC' => intval($publics)
+    );
 }
 
 /**
