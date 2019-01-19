@@ -70,26 +70,22 @@ function job_teaser_resource()
                             'default value' => 0,
                         ),
                     )
-                ),
-                'get_advert_types_stats' => array(
-                    'help' => 'Get advert types stats. How many jobs per type',
-                    'file' => array(
-                        'type' => 'inc',
-                        'module' => 'jir_mobile_resources',
-                        'name' => 'includes/jir_resources_job_teaser.services',
-                    ),
-                    'callback' => 'advert_types_statistics',
-                    'access callback' => 'user_is_logged_in',
-                    'args' => array(
-                        'name' => 'advert_stats',
-                        'type' => 'string',
-                        'description' => 'Function to perform',
-                        'optional' => FALSE,
-                        'source' => array('path' => '0'),
-                    )
                 )
             ),
         ),
+        'jir_stats' => array(
+            'index' => array(
+                'help' => 'Get advert types stats. How many jobs per type',
+                'file' => array(
+                    'type' => 'inc',
+                    'module' => 'jir_mobile_resources',
+                    'name' => 'includes/jir_resources_job_teaser.services',
+                ),
+                'callback' => 'advert_types_statistics',
+                'access callback' => 'user_is_logged_in',
+                'args' => array()
+            ),
+        )
     );
     return $api;
 }
