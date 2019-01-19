@@ -69,7 +69,18 @@ function job_teaser_resource()
                             'optional' => TRUE,
                             'default value' => 0,
                         ),
+                    )
+                ),
+                'get_advert_types_stats' => array(
+                    'help' => 'Get advert types stats. How many jobs per type',
+                    'file' => array(
+                        'type' => 'inc',
+                        'module' => 'jir_mobile_resources',
+                        'name' => 'includes/jir_resources_job_teaser.services',
                     ),
+                    'callback' => 'advert_types_statistics',
+                    'access callback' => 'user_is_logged_in',
+                    'args' => array()
                 )
             ),
         ),
@@ -249,4 +260,88 @@ function get_job_full_resource($node)
         )
     );
     return $job;
+}
+
+function advert_types_statistics() {
+    $query1 = new EntityFieldQuery();
+    $featured = $query1->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_posting_type', 'tid', [33, 34, 36,], 'IN')
+        ->count()->execute();
+
+    $query2 = new EntityFieldQuery();
+    $jobs = $query2->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_offer_type', 'value', 'Job')
+        ->count()->execute();
+
+    $query3 = new EntityFieldQuery();
+    $tenders = $query3->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_offer_type', 'value', 'Tender')
+        ->count()->execute();
+
+    $query4 = new EntityFieldQuery();
+    $consultancy = $query4->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->addTag('consultancy_or_freelance')
+        ->count()->execute();
+
+    $query5 = new EntityFieldQuery();
+    $internship = $query5->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_offer_type', 'value', 'Internship')
+        ->count()->execute();
+
+    $query6 = new EntityFieldQuery();
+    $emps = $query6->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'employer')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_employer_public_employer', 'value', 1)
+        ->execute();
+    $publics = 0;
+    if (isset($emps['node'])) {
+        $emps_ids = array_keys($emps['node']);
+        $query7 = new EntityFieldQuery();
+        $publics = $query7->entityCondition('entity_type', 'node')
+            ->entityCondition('bundle', 'job')
+            ->propertyCondition('status', NODE_PUBLISHED)
+            ->fieldCondition('field_employer', 'target_id', $emps_ids, 'IN')
+            ->count()->execute();
+    }
+
+    $query7 = new EntityFieldQuery();
+    $others = $query7->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'job')
+        ->propertyCondition('status', NODE_PUBLISHED)
+        ->fieldCondition('field_offer_type', 'value', 'Other')
+        ->count()->execute();
+
+    return array(
+        'FEATURED' => $featured,
+        'JOBS' => $jobs,
+        'TENDERS', $tenders,
+        'INTERNSHIP' => $internship,
+        'CONSULTANCY' => $consultancy,
+        'OTHERS'=> $others,
+        'PUBLIC' => $publics);
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function jir_mobile_resources_query_consultancy_or_freelance_alter(QueryAlterableInterface $query)
+{
+    $query->leftjoin('field_data_field_offer_type', 'o', 'nid = o.entity_id');
+    $query->leftjoin('field_data_field_contrat_type', 'c', 'nid = c.entity_id');
+    $query->leftjoin('taxonomy_term_data', 'n', 'n.tid = c.field_contrat_type_tid');
+    $or = db_or();
+    $or->condition('o.field_offer_type_value', 'Consultancy')
+        ->condition('n.name', 'Freelance');
+    $query->condition($or);
 }
