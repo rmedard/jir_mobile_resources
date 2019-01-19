@@ -123,7 +123,7 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *  Return a list of jobs
  */
-function job_teasers_list($pageSize, $advertType, $search, $employerId)
+function job_teasers_list($pageSize, $search, $advertType, $employerId)
 {
     $smartQuery = new EntityFieldQueryExtraFields();
     $smartQuery->entityCondition('entity_type', 'node')
