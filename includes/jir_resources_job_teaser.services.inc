@@ -60,6 +60,16 @@ function job_teaser_resource()
                             'default value' => '',
                         ),
                         array(
+                            'name' => 'advertType',
+                            'type' => 'string',
+                            'description' => 'Advert type string',
+                            'source' => array(
+                                'param' => 'advertType',
+                            ),
+                            'optional' => TRUE,
+                            'default value' => '',
+                        ),
+                        array(
                             'name' => 'employer',
                             'type' => 'int',
                             'description' => 'ID of the employer to whom jobs belong',
@@ -113,7 +123,7 @@ function job_teaser_resource_retrieve($nid)
  * @return array
  *  Return a list of jobs
  */
-function job_teasers_list($pageSize, $search, $employerId)
+function job_teasers_list($pageSize, $advertType, $search, $employerId)
 {
     $smartQuery = new EntityFieldQueryExtraFields();
     $smartQuery->entityCondition('entity_type', 'node')
@@ -129,6 +139,19 @@ function job_teasers_list($pageSize, $search, $employerId)
         ->addExtraField('field_is_featured_advert', 'value')
         ->addExtraField('field_job_super_featured', 'value')
         ->addExtraField('field_employer', 'target_id');
+
+    if (isset($advertType) and strlen(trim($advertType)) > 0) {
+        if (in_array($advertType, array('job','tender','internship','other'))) {
+            $smartQuery->fieldCondition('field_offer_type', $advertType);
+        } elseif ($advertType == 'public') {
+            $smartQuery->addTag('public_sector_job');
+        } elseif ($advertType == 'consultancy') {
+            $smartQuery->addTag('consultancy_or_freelance');
+        } elseif ($advertType == 'featured') {
+            $smartQuery->fieldCondition('field_posting_type', 'tid', [33, 34, 36,], 'IN');
+        }
+    }
+
     if (isset($search) and strlen(trim($search)) > 0) {
         $smartQuery->addTag('job_or_employer_title')->addMetaData('search', $search);
     }
@@ -263,7 +286,8 @@ function get_job_full_resource($node)
     return $job;
 }
 
-function advert_types_statistics() {
+function advert_types_statistics()
+{
     $query1 = new EntityFieldQuery();
     $featured = $query1->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
@@ -326,10 +350,10 @@ function advert_types_statistics() {
     return array(
         'FEATURED' => intval($featured),
         'JOBS' => intval($jobs),
-        'TENDERS'=> intval($tenders),
+        'TENDERS' => intval($tenders),
         'INTERNSHIP' => intval($internship),
         'CONSULTANCY' => intval($consultancy),
-        'OTHERS'=> intval($others),
+        'OTHERS' => intval($others),
         'PUBLIC' => intval($publics)
     );
 }
@@ -343,7 +367,16 @@ function jir_mobile_resources_query_consultancy_or_freelance_alter(QueryAlterabl
     $query->leftjoin('field_data_field_contrat_type', 'c', 'nid = c.entity_id');
     $query->leftjoin('taxonomy_term_data', 'n', 'n.tid = c.field_contrat_type_tid');
     $or = db_or();
-    $or->condition('o.field_offer_type_value', 'Consultancy')
-        ->condition('n.name', 'Freelance');
+    $or->condition('o.field_offer_type_value', 'Consultancy')->condition('n.name', 'Freelance');
     $query->condition($or);
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function jir_mobile_resources_query_public_sector_job_alter(QueryAlterableInterface $query)
+{
+    $query->leftjoin('field_data_field_employer', 'e', 'nid = e.entity_id');
+    $query->leftjoin('field_data_field_employer_public_employer', 'p',
+        'e.field_employer_target_id = p.entity_id and p.field_employer_public_employer_value = 1');
 }
