@@ -122,6 +122,7 @@ function job_teaser_resource_retrieve($nid)
 /**
  * @return array
  *  Return a list of jobs
+ * N.B: Order of params is mandatory
  */
 function job_teasers_list($pageSize, $search, $advertType, $employerId)
 {
@@ -141,9 +142,8 @@ function job_teasers_list($pageSize, $search, $advertType, $employerId)
         ->addExtraField('field_employer', 'target_id');
 
     if (isset($advertType) and strlen(trim($advertType)) > 0) {
-        watchdog('RestApi', 'advertType: ' . $advertType);
-        if (in_array($advertType, array('jobs','tender','internship','other'))) {
-            $smartQuery->fieldCondition('field_offer_type', ucfirst($advertType));
+        if (in_array($advertType, array('job','tender','internship','other'))) {
+            $smartQuery->fieldCondition('field_offer_type', 'value', ucfirst($advertType));
         } elseif ($advertType == 'public') {
             $smartQuery->addTag('public_sector_job');
         } elseif ($advertType == 'consultancy') {
@@ -164,7 +164,7 @@ function job_teasers_list($pageSize, $search, $advertType, $employerId)
         $smartQuery->fieldOrderBy('field_job_super_featured', 'value', 'DESC')
             ->fieldOrderBy('field_posting_type', 'tid', 'DESC');
     } catch (EntityFieldQueryException $e) {
-        watchdog('error', $e);
+        watchdog('RestApi', $e);
     }
 
     $smartResult = $smartQuery->pager($pageSize)->execute();
