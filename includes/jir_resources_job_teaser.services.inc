@@ -141,6 +141,7 @@ function job_teasers_list($pageSize, $advertType, $search, $employerId)
         ->addExtraField('field_employer', 'target_id');
 
     if (isset($advertType) and strlen(trim($advertType)) > 0) {
+        watchdog('RestApi', 'advertType: ' . $advertType);
         if (in_array($advertType, array('jobs','tender','internship','other'))) {
             $smartQuery->fieldCondition('field_offer_type', ucfirst($advertType));
         } elseif ($advertType == 'public') {
