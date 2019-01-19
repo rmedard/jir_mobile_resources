@@ -262,6 +262,7 @@ function get_job_full_resource($node)
 }
 
 function advert_types_statistics() {
+    watchdog('Rest API', 'In stats...');
     $query1 = new EntityFieldQuery();
     $featured = $query1->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'job')
@@ -320,6 +321,8 @@ function advert_types_statistics() {
         ->propertyCondition('status', NODE_PUBLISHED)
         ->fieldCondition('field_offer_type', 'value', 'Other')
         ->count()->execute();
+
+    watchdog('Rest API', $featured);
 
     return array(
         'FEATURED' => $featured,
