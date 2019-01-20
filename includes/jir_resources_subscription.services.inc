@@ -42,22 +42,19 @@ function _subscription_resource_create($data)
         if (!isset($data->names) || !isset($data->email)) {
             throw services_error('Missing names or email. Please correct', 406);
         } elseif (simplenews_user_is_subscribed($data->email, 104)) {
-            watchdog('RestApi', 'User already subscribed: ' . $data->email, null, WATCHDOG_INFO);
             throw services_error('You are already subscribed', 406);
         } else {
             $subscribed = simplenews_subscribe_user($data->email, 104, false, 'website');
             if ($subscribed) {
                 watchdog('RestApi', 'User subscribed successfully: ' . $data->email, null, WATCHDOG_INFO);
                 _simplenews_realname_set_realname($data->email, $data->names);
-                return array('message' => 'User subscribed successfully');
+                return array('message' => 'User subscribed successfully', 'code' => 201);
             } else {
-                watchdog('RestApi', 'User subscription failed');
                 throw services_error('User subscription failed', 400);
             }
         }
     } catch (ServicesException $e) {
         watchdog('RestApi', 'Services failure: ' . $e, null, WATCHDOG_ERROR);
-//        return array('message' => $e->getMessage());
         return array('message' => $e->getMessage(), 'code' => $e->getCode());
     }
 }
