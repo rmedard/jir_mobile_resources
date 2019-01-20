@@ -170,7 +170,7 @@ function job_teasers_list($pageSize, $search, $advertType, $employerId)
     $smartResult = $smartQuery->pager($pageSize)->execute();
 
     $jobNodes = array();
-    foreach ((object)$smartResult['node'] as $jobNode) {
+    foreach ((object)($smartResult['node']) as $jobNode) {
         array_push($jobNodes, get_job_teaser_resource($jobNode));
     }
     return $jobNodes;
