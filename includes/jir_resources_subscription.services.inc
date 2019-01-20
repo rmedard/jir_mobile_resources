@@ -38,7 +38,7 @@ function subscription_resource()
 function _subscription_resource_create($data)
 {
     try {
-        watchdog('RestApi: sent data', json_encode($data));
+        watchdog('RestApi: sent data', $data);
         if (!isset($data->names) || !isset($data->email)) {
             return services_error('Missing names or email. Please correct', 406);
         } elseif (simplenews_user_is_subscribed($data->email, 104)) {
