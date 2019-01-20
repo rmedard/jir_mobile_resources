@@ -10,7 +10,7 @@ function subscription_resource()
         'jir_subscription' => array(
             'operations' => array(
                 'create' => array(
-                    'help' => 'Creates a note',
+                    'help' => 'Creates a user subscription to JIR newsletter',
                     'file' => array(
                         'type' => 'inc',
                         'module' => 'jir_mobile_resources',
