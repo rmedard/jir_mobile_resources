@@ -40,9 +40,11 @@ function _subscription_resource_create($data)
     try {
         $data = (object) $data;
         if (!isset($data->names) || !isset($data->email)) {
+            watchdog('RestApi', 'Missing names or email. Please correct', null, WATCHDOG_ERROR);
             throw services_error('Missing names or email. Please correct', 406);
         } elseif (simplenews_user_is_subscribed($data->email, 104)) {
-            throw services_error(t('User [@email] already subscribed', array('@email' => $data->email)), 406);
+            watchdog('RestApi', t('User [@email] already subscribed', array('@email' => $data->email)), null, WATCHDOG_ERROR);
+            throw services_error(t('You are already subscribed', array('@email' => $data->email)), 406);
         } else {
             $subscribed = simplenews_subscribe_user($data->email, 104, false, 'website');
             if ($subscribed) {
@@ -54,7 +56,6 @@ function _subscription_resource_create($data)
             return array('message' => 'User subscribed successfully', 'code' => 201);
         }
     } catch (ServicesException $e) {
-        watchdog('RestApi', $e->getMessage(), null, WATCHDOG_ERROR);
         return array('message' => $e->getMessage(), 'code' => $e->getCode());
     }
 }
