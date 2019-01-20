@@ -23,7 +23,7 @@ function subscription_resource()
                     'args' => array(
                         array(
                             'name' => 'data',
-                            'type' => 'array',
+                            'type' => 'struct',
                             'description' => 'The resource object',
                             'source' => 'data',
                             'optional' => FALSE,
