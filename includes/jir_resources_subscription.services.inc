@@ -58,6 +58,6 @@ function _subscription_resource_create($data)
     } catch (ServicesException $e) {
         watchdog('RestApi', 'Services failure: ' . $e, null, WATCHDOG_ERROR);
 //        return array('message' => $e->getMessage());
-        return $e;
+        return json_encode($e);
     }
 }
