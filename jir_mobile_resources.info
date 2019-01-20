@@ -5,3 +5,5 @@ package = JIR Custom
 project = jir_mobile_resources
 dependencies[] = services
 dependencies[] = rest_server
+dependencies[] = simplenews
+dependencies[] = simplenews_realname
