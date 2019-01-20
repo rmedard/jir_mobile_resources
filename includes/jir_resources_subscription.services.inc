@@ -48,10 +48,10 @@ function _subscription_resource_create($data)
             if ($subscribed) {
                 watchdog('RestApi', 'User subscribed successfully: ' . $data->email, null, WATCHDOG_INFO);
                 _simplenews_realname_set_realname($data->email, $data->names);
-                return array('message' => 'User subscribed successfully', 'code' => 201);
             } else {
                 throw services_error('User subscription failed', 400);
             }
+            return array('message' => 'User subscribed successfully', 'code' => 201);
         }
     } catch (ServicesException $e) {
         watchdog('RestApi', 'Services failure: ' . $e, null, WATCHDOG_ERROR);
