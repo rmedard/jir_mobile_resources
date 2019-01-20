@@ -38,7 +38,7 @@ function subscription_resource()
 function _subscription_resource_create($data)
 {
     try {
-        $data = json_decode($data);
+        $data = (object) $data;
         watchdog('RestApi: sent data', $data);
         if (!isset($data->names) || !isset($data->email)) {
             return services_error('Missing names or email. Please correct', 406);
