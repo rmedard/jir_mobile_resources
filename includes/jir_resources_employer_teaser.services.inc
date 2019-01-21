@@ -122,7 +122,7 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
         $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
         $query->innerJoin('node', 'n',
             'n.type = :type AND n.status = :status AND e.entity_id = n.nid',
-            array('type' => ':job', ':status' => NODE_PUBLISHED));
+            array(':type' => 'job', ':status' => NODE_PUBLISHED));
     }
 }
 
