@@ -79,6 +79,7 @@ function employer_teaser_resource_retrieve ($nid) {
 }
 
 function employer_teasers_list ($pageSize, $search) {
+    watchdog('RestApi', 'Page size: ' . $pageSize);
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
@@ -87,6 +88,7 @@ function employer_teasers_list ($pageSize, $search) {
         ->pager($pageSize);
     $result = $query->execute();
 
+    watchdog('RestApi', 'Result: ' . json_encode($result));
     $employers = array();
     if (isset($result['node'])) {
         $employer_ids = array_keys($result['node']);
