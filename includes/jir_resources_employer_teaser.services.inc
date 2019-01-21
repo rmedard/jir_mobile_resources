@@ -79,7 +79,6 @@ function employer_teaser_resource_retrieve ($nid) {
 }
 
 function employer_teasers_list ($pageSize, $search) {
-    $employers = array();
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
@@ -87,10 +86,13 @@ function employer_teasers_list ($pageSize, $search) {
         ->addTag('employer_has_jobs')
         ->pager($pageSize);
     $result = $query->execute();
+
+    $employers = array();
     if (isset($result['node'])) {
         $employer_ids = array_keys($result['node']);
-        foreach (entity_load('node', $employer_ids) as $employer) {
-            array_push($employers, map_employer_teaser($employer));
+        $employerNodes = entity_load('node', $employer_ids);
+        foreach ($employerNodes as $node) {
+            array_push($employers, map_employer_teaser($node));
         }
     }
     return $employers;
