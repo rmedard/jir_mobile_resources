@@ -4,7 +4,8 @@
  * Actual Resource
  */
 
-function employer_teaser_resource() {
+function employer_teaser_resource()
+{
 
     $api_employer = array(
         'jir_employer' => array(
@@ -67,7 +68,8 @@ function employer_teaser_resource() {
     return $api_employer;
 }
 
-function employer_teaser_resource_retrieve ($nid) {
+function employer_teaser_resource_retrieve($nid)
+{
     $node = node_load($nid);
     $employer = array();
     if ($node and is_object($node)) {
@@ -78,7 +80,8 @@ function employer_teaser_resource_retrieve ($nid) {
     return $employer;
 }
 
-function employer_teasers_list ($pageSize, $search) {
+function employer_teasers_list($pageSize, $search)
+{
     watchdog('RestApi', 'Page size: ' . $pageSize);
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
@@ -100,7 +103,8 @@ function employer_teasers_list ($pageSize, $search) {
     return $employers;
 }
 
-function map_employer_teaser ($node) {
+function map_employer_teaser($node)
+{
     $employerLogoUri = $node->field_employer_logo[LANGUAGE_NONE][0]['uri'];
     return array(
         'id' => $node->nid,
@@ -116,11 +120,14 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 {
     if ($query instanceof SelectQueryInterface) {
         $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
-        $query->innerJoin('node', 'n', 'n.type = :type AND n.status = :status AND e.entity_id = n.nid', array('type' => 'job', 'status' => NODE_PUBLISHED));
+        $query->innerJoin('node', 'n',
+            'n.type = :type AND n.status = :status AND e.entity_id = n.nid',
+            array('type' => ':job', ':status' => NODE_PUBLISHED));
     }
 }
 
-function get_employer_full_resource($node) {
+function get_employer_full_resource($node)
+{
     $employerCategories = array();
     if (isset($node->field_category[LANGUAGE_NONE]) and count($node->field_category[LANGUAGE_NONE]) > 0) {
         foreach ($node->field_category[LANGUAGE_NONE] as $category) {
