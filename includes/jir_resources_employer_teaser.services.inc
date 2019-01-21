@@ -87,7 +87,8 @@ function employer_teasers_list($pageSize, $search)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->addTag('employer_has_jobs');
+//        ->addTag('employer_has_jobs')
+    ;
     $result = $query->pager($pageSize)->execute();
 
     watchdog('RestApi', 'Result: ' . json_encode($result));
@@ -120,7 +121,7 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
     if ($query instanceof SelectQueryInterface) {
         $query->innerJoin('field_data_field_employer', 'e',
             'nid = e.field_employer_target_id AND e.bundle = \'job\'');
-        $query->innerJoin('node', 'n', 'n.type = \'job\' AND n.status = 1 AND e.entity_id = n.nid');
+        $query->innerJoin('node', 'n', 'n.status = 1 AND n.nid = e.entity_id');
     }
 }
 
