@@ -122,8 +122,8 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //        $selectQuery->where('nid = e.field_employer_target_id')->groupBy('e.field_employer_target_id');
 //        $query->exists($selectQuery);
 
-        $q = 'SELECT job.nid FROM node job INNER JOIN field_data_field_employer e ON e.entity_id = job.nid
-              WHERE e.field_employer_target_id = nid AND job.type = "job" AND job.status = 1';
+        $q = 'SELECT j.nid FROM node j INNER JOIN field_data_field_employer e ON e.entity_id = j.nid
+              WHERE e.field_employer_target_id = nid AND j.type = \'job\' AND j.status = 1';
 
         $spec = db_query($q);
 
