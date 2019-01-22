@@ -87,7 +87,6 @@ function employer_teasers_list($pageSize, $search)
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
         ->addTag('employer_has_jobs');
-    watchdog('RestApi', 'Query: ' . $query->__toString());
     $result = $query->pager($pageSize)->execute();
 
     $employers = array();
@@ -134,8 +133,7 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //            ->condition('e.field_employer_target_id', 'nid')
 //            ->fields('j', array('nid'));
 
-        $selectQuery = db_select('node', 'j')
-            ->fields('j', array('nid'))
+        $selectQuery = db_select('node', 'j')->fields('j', array('nid'))
             ->condition('j.type', 'job', '=')
             ->condition('j.status', NODE_PUBLISHED, '=');
         $selectQuery->join('field_data_field_employer', 'e', 'j.nid = e.entity_id');
