@@ -126,7 +126,7 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
         $and->condition('n.type', 'job')->condition('n.status', NODE_PUBLISHED);
         $query->condition($and);
 
-
+        $query->groupBy('nid');
     }
 }
 
