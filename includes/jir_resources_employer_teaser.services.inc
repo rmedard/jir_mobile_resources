@@ -134,13 +134,14 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //            ->condition('e.field_employer_target_id', 'nid')
 //            ->fields('j', array('nid'));
 
-        $selectQuery = db_select('node', 'j')
+//        $selectQuery = db_select('node', 'j')
+        $selectQuery = db_select('node', 'j', array('empId' => 'nid'))
             ->condition('j.type', 'job')
             ->condition('j.status', NODE_PUBLISHED)
             ->fields('j', array('nid'));
-        $selectQuery->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id');
+        $selectQuery->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id AND e.field_employer_target_id = :empId');
 //        $selectQuery->where('e.field_employer_target_id = nid');
-        $selectQuery->condition('e.field_employer_target_id = nid');
+//        $selectQuery->condition('e.field_employer_target_id = nid');
 
         $query->exists($selectQuery);
 
