@@ -119,8 +119,14 @@ function map_employer_teaser($node)
 function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterface $query)
 {
     if ($query instanceof SelectQueryInterface) {
-        $query->leftJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
-        $query->leftJoin('node', 'n', 'n.nid = e.entity_id');
+
+//        $selectQuery = db_select('field_data_field_employer', 'e')->where('nid = e.field_employer_target_id');
+//        $selectQuery->
+//
+//        $query->exists();
+
+        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
+        $query->innerJoin('node', 'n', 'n.nid = e.entity_id');
 
         $and = db_and();
         $and->condition('n.type', 'job')->condition('n.status', NODE_PUBLISHED);
