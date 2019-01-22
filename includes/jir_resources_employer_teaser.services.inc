@@ -123,11 +123,20 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //        $selectQuery->where('nid = e.field_employer_target_id')->groupBy('e.field_employer_target_id');
 //        $query->exists($selectQuery);
 
-        $selectQuery = db_select('node', 'j');
-        $selectQuery->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id');
-        $selectQuery->where('j.type = \'job\' AND j.status = 1');
+//        SELECT * FROM node emp
+//        WHERE EXISTS( SELECT job.nid FROM node job INNER JOIN field_data_field_employer e ON e.entity_id = job.nid
+//              WHERE e.field_employer_target_id = emp.nid AND job.type = 'job' AND job.status = 1)
+//AND emp.type = 'employer' AND emp.status = 1 ORDER BY emp.title ASC
 
-        $query->exists($selectQuery)->where('nid = e.field_employer_target_id');
+        $selectQuery = db_select('node', 'j')
+            ->condition('j.type', 'job')
+            ->condition('j.status', NODE_PUBLISHED)
+            ->fields('j', array('nid'));
+        $selectQuery
+            ->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id AND e.field_employer_target_id = nid');
+
+
+        $query->exists($selectQuery);
 
 //        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
 //        $query->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
