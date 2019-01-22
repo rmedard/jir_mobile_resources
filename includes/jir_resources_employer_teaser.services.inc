@@ -119,7 +119,7 @@ function map_employer_teaser($node)
 function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterface $query)
 {
     if ($query instanceof SelectQueryInterface) {
-        $query->Join('field_data_field_employer', 'e',
+        $query->innerJoin('field_data_field_employer', 'e',
             'nid = e.field_employer_target_id AND e.bundle = \'job\'');
 //        $query->Join('node', 'n', 'n.status = 1 AND n.nid = e.entity_id');
     }
