@@ -86,7 +86,7 @@ function employer_teasers_list($pageSize, $search)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->addTag('employer_has_jobs');
+        ->addTag('employer_has_jobs')->addTag('debug');
     $result = $query->pager($pageSize)->execute();
 
     $employers = array();
