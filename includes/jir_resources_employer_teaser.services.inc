@@ -118,20 +118,20 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 {
     if ($query instanceof SelectQueryInterface) {
 
-        $selectQuery = db_select('field_data_field_employer', 'e');
-        $selectQuery->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
-        $selectQuery->where('nid = e.field_employer_target_id')->groupBy('e.field_employer_target_id');
-        $query->exists($selectQuery);
+//        $selectQuery = db_select('field_data_field_employer', 'e');
+//        $selectQuery->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
+//        $selectQuery->where('nid = e.field_employer_target_id')->groupBy('e.field_employer_target_id');
+//        $query->exists($selectQuery);
 
 
-//        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
-//        $query->innerJoin('node', 'n', 'n.nid = e.entity_id');
-//
+        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
+        $query->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
+
 //        $and = db_and();
 //        $and->condition('n.type', 'job')->condition('n.status', NODE_PUBLISHED);
 //        $query->condition($and);
-//
-//        $query->groupBy('e.field_employer_target_id');
+
+        $query->groupBy('e.field_employer_target_id');
     }
 }
 
