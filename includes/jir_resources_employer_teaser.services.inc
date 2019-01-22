@@ -82,7 +82,6 @@ function employer_teaser_resource_retrieve($nid)
 
 function employer_teasers_list($pageSize, $search)
 {
-    watchdog('RestApi', 'Page size: ' . $pageSize);
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
@@ -91,7 +90,6 @@ function employer_teasers_list($pageSize, $search)
     ;
     $result = $query->pager($pageSize)->execute();
 
-    watchdog('RestApi', 'Result: ' . json_encode($result));
     $employers = array();
     if (isset($result['node'])) {
         $employer_ids = array_keys($result['node']);
@@ -122,10 +120,10 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 
         $selectQuery = db_select('field_data_field_employer', 'e');
         $selectQuery->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
-        $selectQuery->where('nid = e.field_employer_target_id');
+
 //        $selectQuery->groupBy('e.field_employer_target_id');
         $query->exists($selectQuery);
-
+        $selectQuery->where('nid = e.field_employer_target_id');
 //        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
 //        $query->innerJoin('node', 'n', 'n.nid = e.entity_id');
 //
