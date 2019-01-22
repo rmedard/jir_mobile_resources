@@ -86,7 +86,7 @@ function employer_teasers_list($pageSize, $search)
     $query->entityCondition('entity_type', 'node')
         ->entityCondition('bundle', 'employer')
         ->propertyCondition('status', NODE_PUBLISHED)
-        ->addTag('employer_has_jobs');
+        ->addTag('employer_has_jobs')->addMetaData('empId', 'nid');
     $result = $query->pager($pageSize)->execute();
 
     $employers = array();
@@ -133,10 +133,12 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //            ->condition('e.field_employer_target_id', 'nid')
 //            ->fields('j', array('nid'));
 
+        $empId = $query->getMetaData('empId');
+
         $selectQuery = db_select('node', 'j')->fields('j', array('nid'))
             ->condition('j.type', 'job', '=')
             ->condition('j.status', NODE_PUBLISHED, '=');
-        $selectQuery->where('e.field_employer_target_id = nid')
+        $selectQuery->where('e.field_employer_target_id = :nid', array('nid' => $empId))
             ->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id');
 //            $selectQuery->where('e.field_employer_target_id = nid');
 //        $selectQuery->where('e.field_employer_target_id = nid');
