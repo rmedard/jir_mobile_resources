@@ -127,19 +127,20 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
 //              WHERE e.field_employer_target_id = emp.nid AND job.type = 'job' AND job.status = 1)
 //AND emp.type = 'employer' AND emp.status = 1 ORDER BY emp.title ASC
 
-//        $selectQuery = db_select('node', 'j')
-//            ->condition('j.type', 'job')
-//            ->condition('j.status', NODE_PUBLISHED)
-//            ->condition('e.field_employer_target_id', 'nid')
-//            ->fields('j', array('nid'));
-
         $empId = $query->getMetaData('empId');
 
-        $selectQuery = db_select('node', 'j')
-            ->join('field_data_field_employer', 'e', 'j.nid = e.entity_id AND e.field_employer_target_id = :nid', array('nid' => $empId));
+        $selectQuery = db_select('node', 'j')->fields('j', array('nid'));
+        $selectQuery->innerJoin('field_data_field_employer', 'e', 'j.nid = e.entity_id');
+        $selectQuery->condition('j.type', 'job', '=')
+            ->condition('j.status', NODE_PUBLISHED, '=')
+            ->condition('e.field_employer_target_id', $empId, '=')
+        ;
 
-        $selectQuery->fields('j', array('nid'))->condition('j.type', 'job', '=')
-            ->condition('j.status', NODE_PUBLISHED, '=');
+//        $selectQuery = db_select('node', 'j')
+//            ->join('field_data_field_employer', 'e', 'j.nid = e.entity_id AND e.field_employer_target_id = :nid', array('nid' => $empId));
+//
+//        $selectQuery->fields('j', array('nid'))->condition('j.type', 'job', '=')
+//            ->condition('j.status', NODE_PUBLISHED, '=');
         //            $selectQuery->where('e.field_employer_target_id = nid');
 //        $selectQuery->where('e.field_employer_target_id = nid');
 //        $selectQuery->condition('e.field_employer_target_id = nid');
