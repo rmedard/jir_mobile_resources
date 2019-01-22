@@ -122,8 +122,7 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
         $selectQuery->innerJoin('node', 'n', 'n.nid = e.entity_id AND n.type = \'job\' AND n.status = 1');
 
 //        $selectQuery->groupBy('e.field_employer_target_id');
-        $query->exists($selectQuery);
-        $selectQuery->where('nid = e.field_employer_target_id');
+        $query->exists($selectQuery)->where('nid = e.field_employer_target_id');
 //        $query->innerJoin('field_data_field_employer', 'e', 'nid = e.field_employer_target_id');
 //        $query->innerJoin('node', 'n', 'n.nid = e.entity_id');
 //
