@@ -123,8 +123,10 @@ function jir_mobile_resources_query_employer_has_jobs_alter(QueryAlterableInterf
         $query->leftJoin('node', 'n', 'n.nid = e.entity_id');
 
         $and = db_and();
-        $and->condition('e.bundle', 'job')->condition('n.status', NODE_PUBLISHED);
+        $and->condition('n.type', 'job')->condition('n.status', NODE_PUBLISHED);
         $query->condition($and);
+
+
     }
 }
 
